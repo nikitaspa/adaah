@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /inquiry/confirm
+
+Sitemap: https://lumina-companions.com/sitemap.xml

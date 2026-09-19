@@ -1,0 +1,6 @@
+{
+  "name": "Adaah — 18+ Private Directory",
+  "description": "Adaah is Hyderabad’s premier 18+ private directory for verified independent companions, VIP models, and discreet local introductions in Hyderabad, India.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
