@@ -8,6 +8,7 @@ export const profileImages: Record<string, string[]> = {
     '/images/profiles/profile-001.webp',
     '/images/profiles/profile-001-2.webp',
     '/images/profiles/profile-001-3.webp',
+    '/images/profiles/profile-001-4.webp',
   ],
   'profile-002': [
     '/images/profiles/profile-002.webp',
@@ -182,6 +183,7 @@ export function getProfileImages(profileId: string): string[] {
       '/images/profiles/profile-001.webp',
       '/images/profiles/profile-001-2.webp',
       '/images/profiles/profile-001-3.webp',
+      '/images/profiles/profile-001-4.webp',
     ]
   );
 }

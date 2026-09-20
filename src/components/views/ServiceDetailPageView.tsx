@@ -85,11 +85,13 @@ export function ServiceDetailPageView({
 
             <div className="flex flex-col items-start md:items-end gap-3 p-5 rounded-2xl bg-[#F8F6F1] border border-[#E6E1D8] w-full md:w-auto">
               <div>
-                <span className="text-[10px] uppercase font-bold text-[#5F5A52] block">Starting Honorarium</span>
-                <span className="text-2xl font-bold font-serif-display text-[#171717]">
-                  From {formatCurrency(service.startingPrice)}
+                <span className="text-[10px] uppercase font-bold text-[#5F5A52] block">Honorarium Estimate</span>
+                <span className="text-xl font-bold font-serif-display text-[#171717]">
+                  {service.priceEstimate || 'Contact for Pricing'}
                 </span>
-                <span className="text-xs text-[#5F5A52] block mt-0.5">Typical duration: {service.duration}</span>
+                <span className="text-xs text-[#5F5A52] block mt-0.5">
+                  Typical duration: {service.typicalDuration || 'Flexible'}
+                </span>
               </div>
 
               <button
@@ -103,20 +105,22 @@ export function ServiceDetailPageView({
             </div>
           </div>
 
-          {/* Key Inclusions */}
-          <div className="mt-8 pt-6 border-t border-[#E6E1D8]">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-[#916718] mb-3">
-              Included Standards & Etiquette
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-              {service.inclusions.map((inc, idx) => (
-                <div key={idx} className="flex items-center gap-2 text-xs text-[#171717]">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>{inc}</span>
-                </div>
-              ))}
+          {/* Key Inclusions / What To Expect */}
+          {((service.whatToExpect && service.whatToExpect.length > 0) || ((service as any).inclusions && (service as any).inclusions.length > 0)) && (
+            <div className="mt-8 pt-6 border-t border-[#E6E1D8]">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#916718] mb-3">
+                Included Standards & Expectations
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                {(service.whatToExpect || (service as any).inclusions || []).map((inc: string, idx: number) => (
+                  <div key={idx} className="flex items-center gap-2 text-xs text-[#171717]">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <span>{inc}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Profiles Offering this Occasion */}
