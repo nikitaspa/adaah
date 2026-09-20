@@ -40,12 +40,12 @@ export function LocationCard({ location, onSelect, className = '' }: LocationCar
         </div>
 
         {/* Location Name & Area */}
-        <div className="absolute bottom-3 left-4 right-4 text-white">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-amber-200 flex items-center gap-1">
-            <MapPin className="h-3 w-3 inline text-amber-300" />
-            {location.city || 'Hyderabad'}
+        <div className="absolute bottom-3 left-4 right-4 text-white min-w-0">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-amber-200 flex items-center gap-1 truncate">
+            <MapPin className="h-3 w-3 inline text-amber-300 shrink-0" />
+            <span>{location.city || 'Hyderabad'}</span>
           </span>
-          <h3 className="text-xl font-serif-display font-bold tracking-tight text-white leading-tight">
+          <h3 className="text-xl font-serif-display font-bold tracking-tight text-white leading-tight break-words">
             {location.name}
           </h3>
         </div>

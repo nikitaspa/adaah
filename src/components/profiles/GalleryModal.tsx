@@ -66,7 +66,7 @@ export function GalleryModal({
             type="button"
             onClick={handlePrev}
             aria-label="Previous photo"
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-stone-900/80 text-white hover:bg-stone-800 transition-colors cursor-pointer hidden sm:flex items-center justify-center"
+            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-20 p-2.5 sm:p-3 rounded-full bg-stone-900/80 text-white hover:bg-stone-800 transition-colors cursor-pointer flex items-center justify-center min-h-[44px] min-w-[44px]"
           >
             <ChevronLeft className="h-6 w-6" />
           </button>
@@ -74,7 +74,7 @@ export function GalleryModal({
             type="button"
             onClick={handleNext}
             aria-label="Next photo"
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-stone-900/80 text-white hover:bg-stone-800 transition-colors cursor-pointer hidden sm:flex items-center justify-center"
+            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-20 p-2.5 sm:p-3 rounded-full bg-stone-900/80 text-white hover:bg-stone-800 transition-colors cursor-pointer flex items-center justify-center min-h-[44px] min-w-[44px]"
           >
             <ChevronRight className="h-6 w-6" />
           </button>

@@ -331,8 +331,10 @@ export function Header({
               id="mobile-menu-toggle-btn"
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-xl text-[#171717] hover:bg-[#F3F0E9] transition-colors cursor-pointer"
+              className="lg:hidden p-2 rounded-xl text-[#171717] hover:bg-[#F3F0E9] active:bg-[#E6E1D8] transition-colors cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
               aria-label="Toggle navigation menu"
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-navigation-drawer"
             >
               {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
@@ -355,31 +357,31 @@ export function Header({
               <a
                 href="/"
                 onClick={(e) => handleNavClick(e, '/')}
-                className="px-3 py-2.5 rounded-xl text-base font-semibold text-[#171717] hover:bg-[#F8F6F1]"
+                className="px-3 py-3 rounded-xl text-base font-semibold text-[#171717] hover:bg-[#F8F6F1] flex items-center min-h-[44px]"
               >
                 Home
               </a>
               <a
                 href="/profiles"
                 onClick={(e) => handleNavClick(e, '/profiles')}
-                className="px-3 py-2.5 rounded-xl text-base font-semibold text-[#171717] hover:bg-[#F8F6F1] flex items-center justify-between"
+                className="px-3 py-3 rounded-xl text-base font-semibold text-[#171717] hover:bg-[#F8F6F1] flex items-center justify-between min-h-[44px]"
               >
                 <span>Browse Profiles</span>
                 <span className="text-xs bg-[#C6922E]/15 text-[#916718] font-bold px-2 py-0.5 rounded-full">18+</span>
               </a>
 
               {/* Mobile Categories */}
-              <div className="border-t border-[#E6E1D8] pt-2">
+              <div className="border-t border-[#E6E1D8] pt-3">
                 <div className="px-3 py-1 text-xs font-bold text-[#8C827A] uppercase tracking-wider">
                   Categories
                 </div>
-                <div className="grid grid-cols-2 gap-1 mt-1">
+                <div className="grid grid-cols-2 gap-1.5 mt-1">
                   {siteConfig.navigation.categoriesDropdown.map((cat) => (
                     <a
                       key={cat.href}
                       href={cat.href}
                       onClick={(e) => handleNavClick(e, cat.href)}
-                      className="px-3 py-2 rounded-lg text-sm text-[#5F5A52] hover:text-[#C6922E] hover:bg-[#F8F6F1]"
+                      className="px-3 py-2.5 rounded-lg text-sm text-[#5F5A52] hover:text-[#C6922E] hover:bg-[#F8F6F1] flex items-center min-h-[40px] font-medium"
                     >
                       {cat.title}
                     </a>
@@ -388,17 +390,17 @@ export function Header({
               </div>
 
               {/* Mobile Locations */}
-              <div className="border-t border-[#E6E1D8] pt-2">
+              <div className="border-t border-[#E6E1D8] pt-3">
                 <div className="px-3 py-1 text-xs font-bold text-[#8C827A] uppercase tracking-wider">
                   Hyderabad Locations
                 </div>
-                <div className="grid grid-cols-2 gap-1 mt-1">
+                <div className="grid grid-cols-2 gap-1.5 mt-1">
                   {siteConfig.navigation.locationsDropdown.map((loc) => (
                     <a
                       key={loc.href}
                       href={loc.href}
                       onClick={(e) => handleNavClick(e, loc.href)}
-                      className="px-3 py-2 rounded-lg text-sm text-[#5F5A52] hover:text-[#C6922E] hover:bg-[#F8F6F1]"
+                      className="px-3 py-2.5 rounded-lg text-sm text-[#5F5A52] hover:text-[#C6922E] hover:bg-[#F8F6F1] flex items-center min-h-[40px] font-medium"
                     >
                       {loc.title}
                     </a>
@@ -406,39 +408,39 @@ export function Header({
                 </div>
               </div>
 
-              <div className="border-t border-[#E6E1D8] pt-2 flex flex-col space-y-1">
+              <div className="border-t border-[#E6E1D8] pt-3 flex flex-col space-y-1">
                 <a
                   href="/services"
                   onClick={(e) => handleNavClick(e, '/services')}
-                  className="px-3 py-2 rounded-xl text-sm font-medium text-[#5F5A52] hover:bg-[#F8F6F1]"
+                  className="px-3 py-2.5 rounded-xl text-sm font-medium text-[#5F5A52] hover:bg-[#F8F6F1] flex items-center min-h-[44px]"
                 >
                   Services
                 </a>
                 <a
                   href="/guides"
                   onClick={(e) => handleNavClick(e, '/guides')}
-                  className="px-3 py-2 rounded-xl text-sm font-medium text-[#5F5A52] hover:bg-[#F8F6F1]"
+                  className="px-3 py-2.5 rounded-xl text-sm font-medium text-[#5F5A52] hover:bg-[#F8F6F1] flex items-center min-h-[44px]"
                 >
                   Guides & Etiquette
                 </a>
                 <a
                   href="/safety"
                   onClick={(e) => handleNavClick(e, '/safety')}
-                  className="px-3 py-2 rounded-xl text-sm font-medium text-[#C6922E] hover:bg-[#F8F6F1]"
+                  className="px-3 py-2.5 rounded-xl text-sm font-medium text-[#C6922E] hover:bg-[#F8F6F1] flex items-center min-h-[44px]"
                 >
                   Safety & Discretion
                 </a>
                 <a
                   href="/faq"
                   onClick={(e) => handleNavClick(e, '/faq')}
-                  className="px-3 py-2 rounded-xl text-sm font-medium text-[#5F5A52] hover:bg-[#F8F6F1]"
+                  className="px-3 py-2.5 rounded-xl text-sm font-medium text-[#5F5A52] hover:bg-[#F8F6F1] flex items-center min-h-[44px]"
                 >
                   FAQ
                 </a>
                 <a
                   href="/contact"
                   onClick={(e) => handleNavClick(e, '/contact')}
-                  className="px-3 py-2 rounded-xl text-sm font-medium text-[#5F5A52] hover:bg-[#F8F6F1]"
+                  className="px-3 py-2.5 rounded-xl text-sm font-medium text-[#5F5A52] hover:bg-[#F8F6F1] flex items-center min-h-[44px]"
                 >
                   Contact Concierge
                 </a>

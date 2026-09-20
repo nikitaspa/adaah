@@ -86,19 +86,19 @@ export function ProfileCard({
         </div>
 
         {/* Profile Content Body */}
-        <div className="p-4 sm:p-5 space-y-3">
+        <div className="p-4 sm:p-5 space-y-3 min-w-0">
           {/* Name & Age */}
-          <div className="flex items-baseline justify-between gap-2">
+          <div className="flex items-baseline justify-between gap-2 min-w-0">
             <h3
               onClick={() => onViewProfile?.(profile.slug)}
-              className="font-serif-display text-lg sm:text-xl font-bold text-[#171717] group-hover:text-[#C6922E] transition-colors cursor-pointer"
+              className="font-serif-display text-lg sm:text-xl font-bold text-[#171717] group-hover:text-[#C6922E] transition-colors cursor-pointer truncate"
             >
               {profile.name}, <span className="text-[#5F5A52] font-sans text-base font-normal">{profile.age}</span>
             </h3>
           </div>
 
           {/* Location: Area & City */}
-          <div className="flex items-center text-xs text-[#5F5A52] gap-1.5">
+          <div className="flex items-center text-xs text-[#5F5A52] gap-1.5 min-w-0">
             <MapPin className="w-3.5 h-3.5 text-[#C6922E] shrink-0" />
             <span className="truncate">
               {profile.area || profile.neighborhood ? `${profile.area || profile.neighborhood}, ` : ''}
@@ -108,8 +108,8 @@ export function ProfileCard({
 
           {/* Languages */}
           {profile.languages && profile.languages.length > 0 && (
-            <div className="flex items-center gap-1 text-[11px] text-[#5F5A52]">
-              <span className="text-[#8C827A]">Languages:</span>
+            <div className="flex items-center gap-1 text-[11px] text-[#5F5A52] min-w-0">
+              <span className="text-[#8C827A] shrink-0">Languages:</span>
               <span className="text-[#171717] font-medium truncate">
                 {profile.languages.join(' • ')}
               </span>
@@ -122,7 +122,7 @@ export function ProfileCard({
               {(profile.services || profile.serviceNames || []).slice(0, 2).map((srv, idx) => (
                 <span
                   key={idx}
-                  className="text-[10px] px-2 py-0.5 rounded-md bg-[#F8F6F1] border border-[#E6E1D8] text-[#5F5A52] font-medium"
+                  className="text-[10px] px-2 py-0.5 rounded-md bg-[#F8F6F1] border border-[#E6E1D8] text-[#5F5A52] font-medium max-w-full truncate"
                 >
                   {srv}
                 </span>
@@ -136,16 +136,16 @@ export function ProfileCard({
           )}
 
           {/* Short description */}
-          <p className="text-xs text-[#5F5A52] line-clamp-2 leading-relaxed">
+          <p className="text-xs text-[#5F5A52] line-clamp-2 leading-relaxed break-words">
             {profile.shortDescription || profile.headline || profile.bio}
           </p>
 
           {/* Price block */}
-          <div className="pt-2.5 border-t border-[#E6E1D8] flex items-baseline justify-between">
-            <span className="text-[11px] uppercase tracking-wider text-[#8C827A] font-medium">
+          <div className="pt-2.5 border-t border-[#E6E1D8] flex items-baseline justify-between min-w-0">
+            <span className="text-[11px] uppercase tracking-wider text-[#8C827A] font-medium shrink-0">
               Honorarium
             </span>
-            <div className="text-right">
+            <div className="text-right shrink-0">
               <span className="text-base sm:text-lg font-bold text-[#C6922E] font-serif-display">
                 {formatCurrency(displayPrice)}
               </span>
@@ -162,7 +162,7 @@ export function ProfileCard({
           id={`view-profile-btn-${profile.slug}`}
           type="button"
           onClick={() => onViewProfile?.(profile.slug)}
-          className="w-full py-2.5 px-3 rounded-xl bg-[#F8F6F1] hover:bg-[#F3F0E9] text-[#171717] border border-[#E6E1D8] text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-[0.98]"
+          className="w-full h-11 min-h-[44px] py-2.5 px-3 rounded-xl bg-[#F8F6F1] hover:bg-[#F3F0E9] text-[#171717] border border-[#E6E1D8] text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer active:scale-[0.98]"
         >
           <Eye className="w-3.5 h-3.5 text-[#5F5A52]" />
           <span>View Profile</span>
