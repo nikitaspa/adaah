@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
+import { SEO_CONFIG } from '../../config/seo';
 
 export interface GoogleAnalyticsProps {
   measurementId?: string;
 }
 
 export function GoogleAnalytics({ measurementId }: GoogleAnalyticsProps) {
-  const gaId = measurementId || (typeof process !== 'undefined' && (process.env as any)?.NEXT_PUBLIC_GA_ID) || (import.meta as any).env?.VITE_GA_ID;
+  const gaId = measurementId || (typeof process !== 'undefined' && (process.env as any)?.NEXT_PUBLIC_GA_ID) || (import.meta as any).env?.VITE_GA_ID || SEO_CONFIG.googleAnalyticsId || 'G-N6HWPBLGXY';
 
   useEffect(() => {
     if (!gaId) return;

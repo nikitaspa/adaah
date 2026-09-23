@@ -14,7 +14,7 @@ export const SEO_CONFIG = {
   state: 'Telangana',
   twitterHandle: undefined, // Add official handle if available
   googleSiteVerification: (typeof process !== 'undefined' && (process.env as any)?.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION) || (import.meta as any).env?.VITE_GOOGLE_SITE_VERIFICATION || '',
-  googleAnalyticsId: (typeof process !== 'undefined' && (process.env as any)?.NEXT_PUBLIC_GA_ID) || (import.meta as any).env?.VITE_GA_ID || '',
+  googleAnalyticsId: (typeof process !== 'undefined' && (process.env as any)?.NEXT_PUBLIC_GA_ID) || (import.meta as any).env?.VITE_GA_ID || 'G-N6HWPBLGXY',
 
   organization: {
     name: 'Adaah',
