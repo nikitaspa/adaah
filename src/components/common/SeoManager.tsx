@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { SEO_CONFIG } from '../../config/seo';
-import { createCanonicalUrl, formatTitle, shouldNoindexQuery } from '../../lib/seo';
-import { ProfileRepository, LocationRepository, CategoryRepository, ServiceRepository, GuideRepository } from '../../lib/repositories';
+import { KEYWORD_STRATEGY } from '../../config/keywords';
+import { createCanonicalUrl, shouldNoindexQuery } from '../../lib/seo';
 
 export interface SeoManagerProps {
   currentPath: string;
@@ -14,7 +14,6 @@ export function SeoManager({ currentPath }: SeoManagerProps) {
     let ogType = 'website';
     let ogImage = SEO_CONFIG.defaultImage;
 
-    const fullUrl = window.location.href;
     const pathOnly = currentPath.split('?')[0] || '/';
     const queryString = window.location.search || '';
     const canonicalUrl = createCanonicalUrl(pathOnly);
@@ -50,11 +49,11 @@ export function SeoManager({ currentPath }: SeoManagerProps) {
 
     // Route matching for metadata
     if (pathOnly === '/' || pathOnly === '') {
-      title = SEO_CONFIG.defaultTitle;
-      description = SEO_CONFIG.defaultDescription;
+      title = KEYWORD_STRATEGY.homepage.suggestedTitle;
+      description = KEYWORD_STRATEGY.homepage.suggestedDescription;
     } else if (pathOnly === '/profiles') {
-      title = 'Browse 18+ Independent Companions in Hyderabad | Adaah';
-      description = 'Explore verified 18+ companion profiles in Hyderabad with transparent rates, real photos, availability status, and confidential inquiries.';
+      title = KEYWORD_STRATEGY.profilesListing.suggestedTitle;
+      description = KEYWORD_STRATEGY.profilesListing.suggestedDescription;
     } else if (pathOnly.startsWith('/profiles/')) {
       const slug = pathOnly.replace('/profiles/', '').split('/')[0];
       const profileName = slug
@@ -62,7 +61,7 @@ export function SeoManager({ currentPath }: SeoManagerProps) {
         .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
         .join(' ');
 
-      title = `${profileName} | Hyderabad 18+ Directory | Adaah`;
+      title = `${profileName} | Hyderabad 18+ Profile | Adaah`;
       description = `View verified portfolio, location, availability and confidential inquiry options for ${profileName} in Hyderabad on Adaah directory.`;
       ogType = 'profile';
 
@@ -78,17 +77,19 @@ export function SeoManager({ currentPath }: SeoManagerProps) {
         },
       });
     } else if (pathOnly === '/locations') {
-      title = 'Hyderabad Companion Directories & Locations | Adaah';
-      description = 'Browse verified independent companions across Banjara Hills, Jubilee Hills, Gachibowli, Hitech City, Madhapur, Kondapur, and 30 Hyderabad areas.';
+      title = KEYWORD_STRATEGY.locationsListing.suggestedTitle;
+      description = KEYWORD_STRATEGY.locationsListing.suggestedDescription;
     } else if (pathOnly.startsWith('/locations/')) {
       const slug = pathOnly.replace('/locations/', '').split('/')[0];
+      const locCluster = (KEYWORD_STRATEGY.locationClusters as any)[slug];
+      
       const locName = slug
         .split('-')
         .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
         .join(' ');
 
-      title = `${locName} 18+ Private Directory | Adaah`;
-      description = `Explore verified 18+ private companion listings and local directory information in ${locName}, Hyderabad. Incall suites and outcall appointments.`;
+      title = locCluster?.title || `${locName} Call Girls & 18+ Directory | Adaah`;
+      description = `Explore verified 18+ private companion listings and local directory information in ${locName}, Hyderabad. Incall luxury suites and outcall appointments.`;
     } else if (pathOnly === '/categories') {
       title = 'Companion Categories & Specialties in Hyderabad | Adaah';
       description = 'Explore companion classifications including Independent Companions, VIP Companions, Models, Travel Partners, and Dinner Escorts in Hyderabad.';
