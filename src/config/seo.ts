@@ -1,7 +1,7 @@
 export const SEO_CONFIG = {
   siteName: 'Adaah',
   fullName: 'Adaah — Hyderabad 18+ Private Directory',
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://adaah.life',
+  siteUrl: (typeof process !== 'undefined' && (process.env as any)?.NEXT_PUBLIC_SITE_URL) || (import.meta as any).env?.VITE_SITE_URL || 'https://adaah.life',
   defaultTitle: 'Adaah | Hyderabad 18+ Private Directory',
   titleTemplate: '%s | Adaah',
   defaultDescription:
@@ -13,8 +13,8 @@ export const SEO_CONFIG = {
   city: 'Hyderabad',
   state: 'Telangana',
   twitterHandle: undefined, // Add official handle if available
-  googleSiteVerification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
-  googleAnalyticsId: process.env.NEXT_PUBLIC_GA_ID || '',
+  googleSiteVerification: (typeof process !== 'undefined' && (process.env as any)?.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION) || (import.meta as any).env?.VITE_GOOGLE_SITE_VERIFICATION || '',
+  googleAnalyticsId: (typeof process !== 'undefined' && (process.env as any)?.NEXT_PUBLIC_GA_ID) || (import.meta as any).env?.VITE_GA_ID || '',
 
   organization: {
     name: 'Adaah',

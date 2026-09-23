@@ -5,7 +5,7 @@ export interface GoogleAnalyticsProps {
 }
 
 export function GoogleAnalytics({ measurementId }: GoogleAnalyticsProps) {
-  const gaId = measurementId || process.env.NEXT_PUBLIC_GA_ID;
+  const gaId = measurementId || (typeof process !== 'undefined' && (process.env as any)?.NEXT_PUBLIC_GA_ID) || (import.meta as any).env?.VITE_GA_ID;
 
   useEffect(() => {
     if (!gaId) return;
