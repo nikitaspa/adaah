@@ -1,6 +1,10 @@
 User-agent: *
 Allow: /
 Disallow: /api/
+Disallow: /admin/
+Disallow: /login/
+Disallow: /private/
+Disallow: /test/
 Disallow: /inquiry/confirm
 
-Sitemap: https://lumina-companions.com/sitemap.xml
+Sitemap: https://adaah.life/sitemap.xml

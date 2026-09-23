@@ -5,6 +5,7 @@ import { Location, Profile, Service, Category } from '../../types';
 import { Breadcrumbs } from '../common/Breadcrumbs';
 import { ProfileGrid } from '../profiles/ProfileGrid';
 import { LocationCard } from '../locations/LocationCard';
+import { LocationInternalLinks } from '../seo/LocationInternalLinks';
 import { siteConfig } from '../../config/site';
 
 export interface LocationDetailPageViewProps {
@@ -348,6 +349,9 @@ export function LocationDetailPageView({
             ))}
           </div>
         </div>
+
+        {/* Location Internal Linking System */}
+        <LocationInternalLinks currentLocation={location} onNavigate={onNavigate} />
 
         {/* 8. Final CTA */}
         <div className="p-8 sm:p-12 rounded-3xl bg-white border border-[#E6E1D8] text-center space-y-4 shadow-2xs">

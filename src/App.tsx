@@ -6,6 +6,7 @@ import { SearchModal } from './components/search/SearchModal';
 import { RequestModal } from './components/booking/RequestModal';
 import { AgeGateModal } from './components/common/AgeGateModal';
 import { SeoManager } from './components/common/SeoManager';
+import { GoogleAnalytics } from './components/common/GoogleAnalytics';
 import { StickyMobileCta } from './components/layout/StickyMobileCta';
 
 import { HomePageView } from './components/views/HomePageView';
@@ -25,6 +26,7 @@ import { AboutPageView } from './components/views/AboutPageView';
 import { ContactPageView } from './components/views/ContactPageView';
 import { TermsPageView } from './components/views/TermsPageView';
 import { PrivacyPageView } from './components/views/PrivacyPageView';
+import { NotFoundPageView } from './components/views/NotFoundPageView';
 
 import { Profile, Service, SearchSuggestionItem } from './types';
 
@@ -238,11 +240,11 @@ export default function App() {
       return <PrivacyPageView onNavigate={navigate} />;
     }
 
-    // Default Fallback to Homepage
+    // 18. 404 Fallback for unmatched routes
     return (
-      <HomePageView
+      <NotFoundPageView
         onNavigate={navigate}
-        onRequestService={handleOpenServiceRequest}
+        onOpenSearch={() => setIsSearchOpen(true)}
       />
     );
   };
@@ -252,6 +254,7 @@ export default function App() {
       <div className="flex min-h-screen flex-col bg-[#F8F6F1] text-[#171717] selection:bg-[#C6922E]/30 selection:text-[#171717] font-sans antialiased">
         {/* Dynamic SEO, Meta & Structured Data */}
         <SeoManager currentPath={currentPath} />
+        <GoogleAnalytics />
 
         {/* Global Navigation Header */}
         <Header
