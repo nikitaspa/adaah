@@ -21,7 +21,9 @@ export function ProfileCard({
 }: ProfileCardProps) {
   const isAvailable = profile.availability?.status === 'Available';
   const displayImage = profile.coverImage || profile.avatar || (profile.images && profile.images[0]) || '/images/profiles/profile-001.webp';
-  const displayPrice = profile.priceFrom || profile.pricing?.startingPrice || 10000;
+  const originalPrice = profile.priceFrom || profile.pricing?.startingPrice || 10000;
+  const discountedPrice = Math.round(originalPrice * 0.6);
+  const savings = originalPrice - discountedPrice;
 
   return (
     <article
@@ -38,8 +40,8 @@ export function ProfileCard({
             loading="lazy"
           />
 
-          {/* Top badges: Verification badge */}
-          <div className="absolute top-3 left-3 flex items-center gap-1.5">
+          {/* Top badges: Verification badge & 40% OFF badge */}
+          <div className="absolute top-3 left-3 flex items-center gap-1.5 flex-wrap">
             {profile.verified && (
               <span
                 className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-white/95 text-[#916718] border border-[#C6922E]/40 backdrop-blur-md shadow-xs"
@@ -49,6 +51,9 @@ export function ProfileCard({
                 <span>✓ Verified</span>
               </span>
             )}
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-600 text-white shadow-md animate-pulse">
+              🔥 40% OFF
+            </span>
           </div>
 
           {/* Rating pill */}
@@ -140,16 +145,26 @@ export function ProfileCard({
             {profile.shortDescription || profile.headline || profile.bio}
           </p>
 
-          {/* Price block */}
-          <div className="pt-2.5 border-t border-[#E6E1D8] flex items-baseline justify-between min-w-0">
-            <span className="text-[11px] uppercase tracking-wider text-[#8C827A] font-medium shrink-0">
-              Honorarium
-            </span>
-            <div className="text-right shrink-0">
-              <span className="text-base sm:text-lg font-bold text-[#C6922E] font-serif-display">
-                {formatCurrency(displayPrice)}
+          {/* Price block with 40% Discount */}
+          <div className="pt-2.5 border-t border-[#E6E1D8] flex items-center justify-between min-w-0">
+            <div className="flex flex-col min-w-0">
+              <span className="text-[10px] uppercase tracking-wider text-[#8C827A] font-medium">
+                Honorarium (40% OFF)
               </span>
-              <span className="text-[11px] text-[#8C827A] ml-1">/ session</span>
+              <span className="text-[10px] text-emerald-700 font-semibold truncate">
+                Save {formatCurrency(savings)}
+              </span>
+            </div>
+            <div className="text-right shrink-0">
+              <div className="flex items-baseline justify-end gap-1.5">
+                <span className="text-xs text-[#8C827A] line-through font-medium">
+                  {formatCurrency(originalPrice)}
+                </span>
+                <span className="text-base sm:text-lg font-bold text-[#C6922E] font-serif-display">
+                  {formatCurrency(discountedPrice)}
+                </span>
+              </div>
+              <span className="text-[10px] text-[#8C827A] block">/ session</span>
             </div>
           </div>
         </div>

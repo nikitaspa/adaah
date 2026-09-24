@@ -168,9 +168,12 @@ export function ProfileDetailPageView({
     });
   };
 
-  const startingPrice = profile.priceFrom || profile.pricing?.startingPrice || 10000;
-  const eveningPrice = Math.round(startingPrice * 1.5);
-  const overnightPrice = Math.round(startingPrice * 2.8);
+  const originalPrice = profile.priceFrom || profile.pricing?.startingPrice || 10000;
+  const startingPrice = Math.round(originalPrice * 0.6);
+  const originalEveningPrice = Math.round(originalPrice * 1.5);
+  const eveningPrice = Math.round(originalEveningPrice * 0.6);
+  const originalOvernightPrice = Math.round(originalPrice * 2.8);
+  const overnightPrice = Math.round(originalOvernightPrice * 0.6);
 
   const locationDisplay = `${profile.area || profile.neighborhood || 'Banjara Hills'}, ${profile.city || 'Hyderabad'}`;
   const locationSlug = (profile.area || 'banjara-hills').toLowerCase().replace(/\s+/g, '-');
@@ -261,11 +264,21 @@ export function ProfileDetailPageView({
                   <span className="text-xs font-bold uppercase tracking-wider text-emerald-700">
                     {profile.availability?.status || 'Available'}
                   </span>
+                  <span className="px-2 py-0.5 rounded-md bg-rose-600 text-white text-[10px] font-bold shadow-xs animate-pulse">
+                    40% OFF
+                  </span>
                 </div>
                 <div className="text-right">
-                  <span className="text-xs text-[#8C827A] block">Starting from</span>
-                  <span className="text-lg font-bold text-[#C6922E] font-serif-display">
-                    {formatCurrency(startingPrice)}
+                  <div className="flex items-baseline justify-end gap-1.5">
+                    <span className="text-xs text-[#8C827A] line-through font-medium">
+                      {formatCurrency(originalPrice)}
+                    </span>
+                    <span className="text-lg font-bold text-[#C6922E] font-serif-display">
+                      {formatCurrency(startingPrice)}
+                    </span>
+                  </div>
+                  <span className="text-[10px] text-emerald-700 font-semibold block">
+                    Save {formatCurrency(originalPrice - startingPrice)}
                   </span>
                 </div>
               </div>
@@ -383,16 +396,21 @@ export function ProfileDetailPageView({
 
             {/* Honorarium / Pricing Table in INR (₹) */}
             <div className="rounded-3xl border border-[#E6E1D8] bg-white p-6 sm:p-8 shadow-xs space-y-4">
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
-                  <h2 className="font-serif-display text-xl font-bold text-[#171717]">
-                    Honorarium & Rates (INR ₹)
-                  </h2>
-                  <p className="text-xs text-[#5F5A52]">
-                    Discreet companionship compensation guidelines — direct arrangement
+                  <div className="flex items-center gap-2">
+                    <h2 className="font-serif-display text-xl font-bold text-[#171717]">
+                      Honorarium & Rates (INR ₹)
+                    </h2>
+                    <span className="px-2.5 py-1 rounded-full bg-rose-600 text-white text-xs font-bold shadow-xs">
+                      🔥 40% OFF
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#5F5A52] mt-0.5">
+                    Limited time 40% discount applied to all meeting packages
                   </p>
                 </div>
-                <span className="text-[11px] font-bold text-[#916718] bg-[#C6922E]/10 px-2.5 py-1 rounded-md border border-[#C6922E]/20">
+                <span className="text-[11px] font-bold text-[#916718] bg-[#C6922E]/10 px-2.5 py-1 rounded-md border border-[#C6922E]/20 self-start sm:self-auto">
                   Direct Arrangements
                 </span>
               </div>
@@ -405,10 +423,17 @@ export function ProfileDetailPageView({
                     <span className="text-xs text-[#8C827A]">1 to 2 hours</span>
                   </div>
                   <div className="mt-3 pt-3 border-t border-[#E6E1D8]">
-                    <div className="text-xl font-bold font-serif-display text-[#C6922E]">
-                      {formatCurrency(startingPrice)}
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-xs text-[#8C827A] line-through font-medium">
+                        {formatCurrency(originalPrice)}
+                      </span>
+                      <div className="text-xl font-bold font-serif-display text-[#C6922E]">
+                        {formatCurrency(startingPrice)}
+                      </div>
                     </div>
-                    <span className="text-[10px] text-[#8C827A]">Incall / Outcall</span>
+                    <span className="text-[10px] text-emerald-700 font-semibold block">
+                      Save {formatCurrency(originalPrice - startingPrice)}
+                    </span>
                   </div>
                 </div>
 
@@ -422,10 +447,17 @@ export function ProfileDetailPageView({
                     <span className="text-xs text-[#8C827A]">3 to 4 hours</span>
                   </div>
                   <div className="mt-3 pt-3 border-t border-[#E6E1D8]">
-                    <div className="text-xl font-bold font-serif-display text-[#C6922E]">
-                      {formatCurrency(eveningPrice)}
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-xs text-[#8C827A] line-through font-medium">
+                        {formatCurrency(originalEveningPrice)}
+                      </span>
+                      <div className="text-xl font-bold font-serif-display text-[#C6922E]">
+                        {formatCurrency(eveningPrice)}
+                      </div>
                     </div>
-                    <span className="text-[10px] text-[#8C827A]">Fine Dining & Social</span>
+                    <span className="text-[10px] text-emerald-700 font-semibold block">
+                      Save {formatCurrency(originalEveningPrice - eveningPrice)}
+                    </span>
                   </div>
                 </div>
 
@@ -436,10 +468,17 @@ export function ProfileDetailPageView({
                     <span className="text-xs text-[#8C827A]">Full Night (Star Hotel)</span>
                   </div>
                   <div className="mt-3 pt-3 border-t border-[#E6E1D8]">
-                    <div className="text-xl font-bold font-serif-display text-[#C6922E]">
-                      {formatCurrency(overnightPrice)}
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-xs text-[#8C827A] line-through font-medium">
+                        {formatCurrency(originalOvernightPrice)}
+                      </span>
+                      <div className="text-xl font-bold font-serif-display text-[#C6922E]">
+                        {formatCurrency(overnightPrice)}
+                      </div>
                     </div>
-                    <span className="text-[10px] text-[#8C827A]">Suite Hospitality</span>
+                    <span className="text-[10px] text-emerald-700 font-semibold block">
+                      Save {formatCurrency(originalOvernightPrice - overnightPrice)}
+                    </span>
                   </div>
                 </div>
               </div>

@@ -303,9 +303,15 @@ export function RequestModal({
                               )}
                             </div>
                             <p className="text-xs text-stone-400 truncate">{p.city}</p>
-                            <p className="text-xs font-semibold text-amber-300">
-                              {formatCurrency(p.priceFrom)}
-                            </p>
+                            <div className="flex items-baseline gap-1.5 text-xs font-semibold">
+                              <span className="text-stone-400 line-through text-[11px]">
+                                {formatCurrency(p.priceFrom || 10000)}
+                              </span>
+                              <span className="text-amber-300">
+                                {formatCurrency(Math.round((p.priceFrom || 10000) * 0.6))}
+                              </span>
+                              <span className="text-[10px] text-emerald-400 font-bold">40% OFF</span>
+                            </div>
                           </div>
                         </div>
                       );
