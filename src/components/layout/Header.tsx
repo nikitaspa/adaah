@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, Menu, X, ChevronDown, Sparkles, Phone, MessageCircle } from 'lucide-react';
+import { Search, Menu, X, ChevronDown, Phone, MessageCircle } from 'lucide-react';
 import { siteConfig } from '../../config/site';
 import { WhatsAppButton } from '../common/WhatsAppButton';
 import { CallButton } from '../common/CallButton';
@@ -15,16 +15,21 @@ export function Header({
   currentPath = '/',
   onNavigate,
   onOpenSearch,
-  onOpenInquiry,
 }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [locationsOpen, setLocationsOpen] = useState(false);
+  const [mobileCategoriesOpen, setMobileCategoriesOpen] = useState(
+    currentPath.startsWith('/categories')
+  );
+  const [mobileLocationsOpen, setMobileLocationsOpen] = useState(
+    currentPath.startsWith('/locations')
+  );
 
   const categoriesRef = useRef<HTMLDivElement>(null);
   const locationsRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdowns on outside click
+  // Close desktop dropdowns on outside click
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
       if (categoriesRef.current && !categoriesRef.current.contains(e.target as Node)) {
@@ -38,6 +43,46 @@ export function Header({
     return () => document.removeEventListener('mousedown', handleOutsideClick);
   }, []);
 
+  // Keyboard shortcuts: Cmd/Ctrl+K for search, Escape to close menus
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        onOpenSearch?.();
+      }
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false);
+        setCategoriesOpen(false);
+        setLocationsOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onOpenSearch]);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
+  // Auto-close mobile drawer if resized to desktop viewport
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1280) {
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setMobileMenuOpen(false);
@@ -46,43 +91,44 @@ export function Header({
     onNavigate?.(href);
   };
 
-  const navItems = [
-    { label: 'Home', href: '/' },
-    { label: 'Profiles', href: '/profiles' },
-    { label: 'Services', href: '/services' },
-    { label: 'Guides', href: '/guides' },
-    { label: 'FAQ', href: '/faq' },
-    { label: 'Contact', href: '/contact' },
-  ];
-
   return (
     <>
-      {/* SECTION 1: TOP BAR */}
+      {/* SECTION 1: TOP ANNOUNCEMENT BAR */}
       <div
         id="top-announcement-bar"
-        className="w-full bg-[#F3F0E9] border-b border-[#E6E1D8] px-4 sm:px-6 lg:px-8 py-2 text-xs text-[#5F5A52]"
+        className="w-full bg-[#F3F0E9] border-b border-[#E6E1D8] px-3 sm:px-6 lg:px-8 py-1.5 sm:py-2 text-xs text-[#5F5A52]"
       >
-        <div className="mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-1 sm:gap-4">
-          <div className="flex items-center gap-2">
-            <span className="inline-flex items-center px-2 py-0.5 rounded font-bold text-[10px] bg-[#C6922E]/15 text-[#916718] border border-[#C6922E]/30">
+        <div className="mx-auto max-w-7xl flex items-center justify-between gap-2">
+          {/* Left: 18+ Advisory */}
+          <div className="flex items-center gap-1.5 sm:gap-2 min-w-0">
+            <span className="inline-flex items-center px-1.5 py-0.5 rounded font-bold text-[9px] sm:text-[10px] bg-[#C6922E]/15 text-[#916718] border border-[#C6922E]/30 shrink-0 tracking-wide">
               18+ ONLY
             </span>
-            <span className="font-medium text-[#5F5A52]">Adults Only Directory | Hyderabad, India</span>
+            <span className="font-medium text-[#5F5A52] truncate text-[11px] sm:text-xs">
+              Adults Only Directory <span className="hidden sm:inline">| Hyderabad, India</span>
+            </span>
           </div>
-          <div className="flex items-center gap-2 sm:gap-3 text-[11px] sm:text-xs">
+
+          {/* Right: Direct Contacts */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0 text-[11px] sm:text-xs">
             <a
               href={`tel:${siteConfig.contact.phoneRaw}`}
-              className="hover:text-[#C6922E] font-medium transition-colors"
+              className="hover:text-[#C6922E] font-medium transition-colors hidden sm:flex items-center gap-1"
+              aria-label={`Call ${siteConfig.contact.phone}`}
             >
-              Contact: <span className="font-semibold text-[#171717]">{siteConfig.contact.phone}</span>
+              <Phone className="w-3 h-3 text-[#C6922E]" />
+              <span className="text-[#5F5A52]">Contact:</span>
+              <span className="font-semibold text-[#171717]">{siteConfig.contact.phone}</span>
             </a>
-            <span className="text-[#D0C9BD]">|</span>
+            <span className="text-[#D0C9BD] hidden sm:inline">|</span>
             <a
               href={siteConfig.contact.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#25D366] hover:text-[#20BA5A] font-medium transition-colors flex items-center gap-1"
+              aria-label="WhatsApp Concierge"
             >
+              <MessageCircle className="w-3.5 h-3.5" />
               <span>WhatsApp</span>
             </a>
             <span className="hidden md:inline text-[#D0C9BD]">|</span>
@@ -96,17 +142,18 @@ export function Header({
         id="main-site-header"
         className="sticky top-0 z-40 w-full border-b border-[#E6E1D8] bg-[#FFFFFF]/95 backdrop-blur-md transition-all text-[#171717] shadow-xs"
       >
-        <div className="mx-auto flex h-18 md:h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-16 sm:h-18 lg:h-20 max-w-7xl items-center justify-between px-3 sm:px-6 lg:px-8">
           {/* Logo & Brand Identity */}
-          <div className="flex items-center gap-6 xl:gap-8">
+          <div className="flex items-center gap-3 sm:gap-6 xl:gap-8">
             <a
               id="header-logo-link"
               href="/"
               onClick={(e) => handleNavClick(e, '/')}
-              className="flex items-center gap-3 group cursor-pointer"
+              className="flex items-center gap-2.5 sm:gap-3 group cursor-pointer shrink-0"
+              aria-label="Adaah Home"
             >
-              <div className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-xl bg-[#F8F6F1] border border-[#C6922E]/40 text-[#C6922E] shadow-2xs group-hover:border-[#C6922E] transition-colors">
-                <span className="font-serif-display font-bold text-xl text-[#C6922E]">A</span>
+              <div className="flex h-9 w-9 sm:h-10 sm:w-10 xl:h-11 xl:w-11 items-center justify-center rounded-xl bg-[#F8F6F1] border border-[#C6922E]/40 text-[#C6922E] shadow-2xs group-hover:border-[#C6922E] transition-colors">
+                <span className="font-serif-display font-bold text-lg sm:text-xl text-[#C6922E]">A</span>
               </div>
               <div className="flex flex-col">
                 <span className="font-serif-display text-xl sm:text-2xl font-bold tracking-tight text-[#171717] leading-none group-hover:text-[#C6922E] transition-colors">
@@ -115,17 +162,18 @@ export function Header({
               </div>
             </a>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center space-x-1 xl:space-x-1.5" aria-label="Main Navigation">
+            {/* Desktop Navigation (visible on xl: >=1280px) */}
+            <nav className="hidden xl:flex items-center space-x-1 xl:space-x-1.5" aria-label="Main Navigation">
               {/* Home */}
               <a
                 id="nav-link-home"
                 href="/"
                 onClick={(e) => handleNavClick(e, '/')}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${currentPath === '/' || currentPath === ''
-                  ? 'text-[#C6922E] font-semibold border-b-2 border-[#C6922E] rounded-b-none'
-                  : 'text-[#5F5A52] hover:text-[#171717] hover:bg-[#F8F6F1]'
-                  }`}
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
+                  currentPath === '/' || currentPath === ''
+                    ? 'text-[#C6922E] font-semibold border-b-2 border-[#C6922E] rounded-b-none'
+                    : 'text-[#5F5A52] hover:text-[#171717] hover:bg-[#F8F6F1]'
+                }`}
               >
                 Home
               </a>
@@ -135,10 +183,11 @@ export function Header({
                 id="nav-link-profiles"
                 href="/profiles"
                 onClick={(e) => handleNavClick(e, '/profiles')}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${currentPath === '/profiles'
-                  ? 'text-[#C6922E] font-semibold border-b-2 border-[#C6922E] rounded-b-none'
-                  : 'text-[#5F5A52] hover:text-[#171717] hover:bg-[#F8F6F1]'
-                  }`}
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
+                  currentPath === '/profiles'
+                    ? 'text-[#C6922E] font-semibold border-b-2 border-[#C6922E] rounded-b-none'
+                    : 'text-[#5F5A52] hover:text-[#171717] hover:bg-[#F8F6F1]'
+                }`}
               >
                 Profiles
               </a>
@@ -152,13 +201,18 @@ export function Header({
                     setCategoriesOpen(!categoriesOpen);
                     setLocationsOpen(false);
                   }}
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1 cursor-pointer ${currentPath.startsWith('/categories') || categoriesOpen
-                    ? 'text-[#C6922E] font-semibold'
-                    : 'text-[#5F5A52] hover:text-[#171717] hover:bg-[#F8F6F1]'
-                    }`}
+                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1 cursor-pointer ${
+                    currentPath.startsWith('/categories') || categoriesOpen
+                      ? 'text-[#C6922E] font-semibold'
+                      : 'text-[#5F5A52] hover:text-[#171717] hover:bg-[#F8F6F1]'
+                  }`}
                 >
                   <span>Categories</span>
-                  <ChevronDown className={`w-3.5 h-3.5 transition-transform ${categoriesOpen ? 'rotate-180 text-[#C6922E]' : 'text-[#8C827A]'}`} />
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 transition-transform ${
+                      categoriesOpen ? 'rotate-180 text-[#C6922E]' : 'text-[#8C827A]'
+                    }`}
+                  />
                 </button>
 
                 {categoriesOpen && (
@@ -201,13 +255,18 @@ export function Header({
                     setLocationsOpen(!locationsOpen);
                     setCategoriesOpen(false);
                   }}
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1 cursor-pointer ${currentPath.startsWith('/locations') || locationsOpen
-                    ? 'text-[#C6922E] font-semibold'
-                    : 'text-[#5F5A52] hover:text-[#171717] hover:bg-[#F8F6F1]'
-                    }`}
+                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1 cursor-pointer ${
+                    currentPath.startsWith('/locations') || locationsOpen
+                      ? 'text-[#C6922E] font-semibold'
+                      : 'text-[#5F5A52] hover:text-[#171717] hover:bg-[#F8F6F1]'
+                  }`}
                 >
                   <span>Locations</span>
-                  <ChevronDown className={`w-3.5 h-3.5 transition-transform ${locationsOpen ? 'rotate-180 text-[#C6922E]' : 'text-[#8C827A]'}`} />
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 transition-transform ${
+                      locationsOpen ? 'rotate-180 text-[#C6922E]' : 'text-[#8C827A]'
+                    }`}
+                  />
                 </button>
 
                 {locationsOpen && (
@@ -248,10 +307,11 @@ export function Header({
                 id="nav-link-services"
                 href="/services"
                 onClick={(e) => handleNavClick(e, '/services')}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${currentPath === '/services'
-                  ? 'text-[#C6922E] font-semibold border-b-2 border-[#C6922E] rounded-b-none'
-                  : 'text-[#5F5A52] hover:text-[#171717] hover:bg-[#F8F6F1]'
-                  }`}
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
+                  currentPath === '/services'
+                    ? 'text-[#C6922E] font-semibold border-b-2 border-[#C6922E] rounded-b-none'
+                    : 'text-[#5F5A52] hover:text-[#171717] hover:bg-[#F8F6F1]'
+                }`}
               >
                 Services
               </a>
@@ -261,10 +321,11 @@ export function Header({
                 id="nav-link-guides"
                 href="/guides"
                 onClick={(e) => handleNavClick(e, '/guides')}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${currentPath.startsWith('/guides')
-                  ? 'text-[#C6922E] font-semibold border-b-2 border-[#C6922E] rounded-b-none'
-                  : 'text-[#5F5A52] hover:text-[#171717] hover:bg-[#F8F6F1]'
-                  }`}
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
+                  currentPath.startsWith('/guides')
+                    ? 'text-[#C6922E] font-semibold border-b-2 border-[#C6922E] rounded-b-none'
+                    : 'text-[#5F5A52] hover:text-[#171717] hover:bg-[#F8F6F1]'
+                }`}
               >
                 Guides
               </a>
@@ -274,10 +335,11 @@ export function Header({
                 id="nav-link-faq"
                 href="/faq"
                 onClick={(e) => handleNavClick(e, '/faq')}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${currentPath === '/faq'
-                  ? 'text-[#C6922E] font-semibold border-b-2 border-[#C6922E] rounded-b-none'
-                  : 'text-[#5F5A52] hover:text-[#171717] hover:bg-[#F8F6F1]'
-                  }`}
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
+                  currentPath === '/faq'
+                    ? 'text-[#C6922E] font-semibold border-b-2 border-[#C6922E] rounded-b-none'
+                    : 'text-[#5F5A52] hover:text-[#171717] hover:bg-[#F8F6F1]'
+                }`}
               >
                 FAQ
               </a>
@@ -287,10 +349,11 @@ export function Header({
                 id="nav-link-contact"
                 href="/contact"
                 onClick={(e) => handleNavClick(e, '/contact')}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${currentPath === '/contact'
-                  ? 'text-[#C6922E] font-semibold border-b-2 border-[#C6922E] rounded-b-none'
-                  : 'text-[#5F5A52] hover:text-[#171717] hover:bg-[#F8F6F1]'
-                  }`}
+                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
+                  currentPath === '/contact'
+                    ? 'text-[#C6922E] font-semibold border-b-2 border-[#C6922E] rounded-b-none'
+                    : 'text-[#5F5A52] hover:text-[#171717] hover:bg-[#F8F6F1]'
+                }`}
               >
                 Contact
               </a>
@@ -298,152 +361,229 @@ export function Header({
           </div>
 
           {/* Right Action Area */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* Quick search modal trigger */}
+          <div className="flex items-center gap-1.5 sm:gap-2.5 md:gap-3 shrink-0">
+            {/* Quick search button */}
             <button
               id="header-search-trigger"
               type="button"
               onClick={onOpenSearch}
-              className="flex items-center gap-1.5 h-10 px-3 md:px-3.5 rounded-xl border border-[#E6E1D8] bg-[#F8F6F1] text-[#5F5A52] hover:text-[#171717] hover:border-[#C6922E] hover:bg-white transition-all text-xs md:text-sm cursor-pointer shadow-2xs"
+              className="flex items-center justify-center sm:justify-start gap-1.5 h-9 sm:h-10 w-9 sm:w-auto px-0 sm:px-3 md:px-3.5 rounded-xl border border-[#E6E1D8] bg-[#F8F6F1] text-[#5F5A52] hover:text-[#171717] hover:border-[#C6922E] hover:bg-white active:bg-[#EAE5DB] transition-all text-xs md:text-sm cursor-pointer shadow-2xs"
               aria-label="Open directory search"
             >
-              <Search className="h-4 w-4 text-[#C6922E]" />
-              <span className="hidden md:inline font-medium">Search…</span>
-              <kbd className="hidden lg:inline-block px-1.5 py-0.5 text-[10px] font-semibold text-[#8C827A] bg-white border border-[#E6E1D8] rounded">
+              <Search className="h-4 w-4 text-[#C6922E] shrink-0" />
+              <span className="hidden sm:inline font-medium">Search…</span>
+              <kbd className="hidden 2xl:inline-block px-1.5 py-0.5 text-[10px] font-semibold text-[#8C827A] bg-white border border-[#E6E1D8] rounded">
                 ⌘K
               </kbd>
             </button>
 
-            {/* Primary Action Button 1: WhatsApp */}
+            {/* Primary Action Button: WhatsApp (clean, visible on mobile & desktop) */}
             <WhatsAppButton
               size="sm"
-              className="hidden sm:inline-flex"
             />
 
-            {/* Primary Action Button 2: Call Now */}
-            <CallButton
-              size="sm"
-              className="hidden sm:inline-flex"
-            />
+            {/* Desktop Only Action: Call Now (hidden on mobile and tablet, only on xl: >=1280px) */}
+            <div className="hidden xl:inline-flex">
+              <CallButton
+                size="sm"
+              />
+            </div>
 
-            {/* Mobile menu toggle */}
+            {/* Mobile & Tablet menu toggle button (visible on <xl: <1280px) */}
             <button
               id="mobile-menu-toggle-btn"
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-xl text-[#171717] hover:bg-[#F3F0E9] active:bg-[#E6E1D8] transition-colors cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center"
+              className="xl:hidden p-2 rounded-xl text-[#171717] hover:bg-[#F3F0E9] active:bg-[#E6E1D8] transition-colors cursor-pointer min-h-[36px] min-w-[36px] sm:min-h-[40px] sm:min-w-[40px] flex items-center justify-center shrink-0"
               aria-label="Toggle navigation menu"
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-navigation-drawer"
             >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {mobileMenuOpen ? <X className="h-6 w-6 text-[#C6922E]" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation Drawer */}
+        {/* Mobile & Tablet Navigation Drawer Overlay Backdrop */}
+        {mobileMenuOpen && (
+          <div
+            className="fixed inset-x-0 bottom-0 top-full bg-black/40 backdrop-blur-xs z-30 xl:hidden pointer-events-auto"
+            onClick={() => setMobileMenuOpen(false)}
+            aria-hidden="true"
+          />
+        )}
+
+        {/* Mobile & Tablet Navigation Drawer */}
         {mobileMenuOpen && (
           <div
             id="mobile-navigation-drawer"
-            className="lg:hidden border-t border-[#E6E1D8] bg-white px-4 pt-3 pb-6 space-y-4 max-h-[85vh] overflow-y-auto shadow-xl"
+            className="relative z-40 xl:hidden border-t border-[#E6E1D8] bg-white px-4 sm:px-6 pt-3 pb-28 space-y-4 max-h-[calc(100vh-4rem)] sm:max-h-[calc(100vh-4.5rem)] overflow-y-auto shadow-2xl animate-in fade-in slide-in-from-top-1"
           >
-            {/* Mobile quick actions */}
-            <div className="grid grid-cols-2 gap-2 pt-1 pb-2 border-b border-[#E6E1D8]">
+            {/* Quick Action (WhatsApp only on mobile) */}
+            <div className="pt-1 pb-1">
               <WhatsAppButton size="md" fullWidth />
-              <CallButton size="md" fullWidth />
             </div>
 
+            {/* Mobile Search Button */}
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenSearch?.();
+              }}
+              className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl border border-[#E6E1D8] bg-[#F8F6F1] text-[#5F5A52] hover:text-[#171717] hover:border-[#C6922E] text-sm font-medium transition-colors cursor-pointer shadow-2xs"
+            >
+              <div className="flex items-center gap-2">
+                <Search className="h-4 w-4 text-[#C6922E]" />
+                <span>Search companions, areas…</span>
+              </div>
+              <span className="text-xs text-[#8C827A] bg-white px-2 py-0.5 rounded border border-[#E6E1D8] font-semibold">
+                Search
+              </span>
+            </button>
+
+            {/* Main Links */}
             <div className="flex flex-col space-y-1">
               <a
                 href="/"
                 onClick={(e) => handleNavClick(e, '/')}
-                className="px-3 py-3 rounded-xl text-base font-semibold text-[#171717] hover:bg-[#F8F6F1] flex items-center min-h-[44px]"
+                className={`px-3 py-2.5 rounded-xl text-base font-semibold flex items-center min-h-[44px] transition-colors ${
+                  currentPath === '/' || currentPath === ''
+                    ? 'bg-[#F8F6F1] text-[#C6922E]'
+                    : 'text-[#171717] hover:bg-[#F8F6F1]'
+                }`}
               >
                 Home
               </a>
               <a
                 href="/profiles"
                 onClick={(e) => handleNavClick(e, '/profiles')}
-                className="px-3 py-3 rounded-xl text-base font-semibold text-[#171717] hover:bg-[#F8F6F1] flex items-center justify-between min-h-[44px]"
+                className={`px-3 py-2.5 rounded-xl text-base font-semibold flex items-center justify-between min-h-[44px] transition-colors ${
+                  currentPath === '/profiles'
+                    ? 'bg-[#F8F6F1] text-[#C6922E]'
+                    : 'text-[#171717] hover:bg-[#F8F6F1]'
+                }`}
               >
                 <span>Browse Profiles</span>
-                <span className="text-xs bg-[#C6922E]/15 text-[#916718] font-bold px-2 py-0.5 rounded-full">18+</span>
+                <span className="text-xs bg-[#C6922E]/15 text-[#916718] font-bold px-2 py-0.5 rounded-full border border-[#C6922E]/30">
+                  18+ Verified
+                </span>
               </a>
 
-              {/* Mobile Categories */}
-              <div className="border-t border-[#E6E1D8] pt-3">
-                <div className="px-3 py-1 text-xs font-bold text-[#8C827A] uppercase tracking-wider">
-                  Categories
-                </div>
-                <div className="grid grid-cols-2 gap-1.5 mt-1">
-                  {siteConfig.navigation.categoriesDropdown.map((cat) => (
-                    <a
-                      key={cat.href}
-                      href={cat.href}
-                      onClick={(e) => handleNavClick(e, cat.href)}
-                      className="px-3 py-2.5 rounded-lg text-sm text-[#5F5A52] hover:text-[#C6922E] hover:bg-[#F8F6F1] flex items-center min-h-[40px] font-medium"
-                    >
-                      {cat.title}
-                    </a>
-                  ))}
-                </div>
+              {/* Mobile Categories Accordion */}
+              <div className="border-t border-[#E6E1D8] pt-2">
+                <button
+                  type="button"
+                  onClick={() => setMobileCategoriesOpen(!mobileCategoriesOpen)}
+                  className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-[#8C827A] uppercase tracking-wider hover:bg-[#F8F6F1] transition-colors cursor-pointer"
+                >
+                  <span>Categories ({siteConfig.navigation.categoriesDropdown.length})</span>
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform duration-200 ${
+                      mobileCategoriesOpen ? 'rotate-180 text-[#C6922E]' : 'text-[#8C827A]'
+                    }`}
+                  />
+                </button>
+                {mobileCategoriesOpen && (
+                  <div className="grid grid-cols-2 gap-1.5 px-1 pt-1 pb-2">
+                    {siteConfig.navigation.categoriesDropdown.map((cat) => (
+                      <a
+                        key={cat.href}
+                        href={cat.href}
+                        onClick={(e) => handleNavClick(e, cat.href)}
+                        className={`px-2.5 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors flex items-center min-h-[38px] ${
+                          currentPath === cat.href
+                            ? 'bg-[#F8F6F1] text-[#C6922E] font-semibold'
+                            : 'text-[#5F5A52] hover:text-[#C6922E] hover:bg-[#F8F6F1]'
+                        }`}
+                      >
+                        {cat.title}
+                      </a>
+                    ))}
+                    <div className="col-span-2 pt-1 border-t border-[#E6E1D8]/60">
+                      <a
+                        href="/categories"
+                        onClick={(e) => handleNavClick(e, '/categories')}
+                        className="inline-flex items-center text-xs font-semibold text-[#C6922E] hover:text-[#A8751F] px-2.5 py-1"
+                      >
+                        View All Categories →
+                      </a>
+                    </div>
+                  </div>
+                )}
               </div>
 
-              {/* Mobile Locations */}
-              <div className="border-t border-[#E6E1D8] pt-3">
-                <div className="px-3 py-1 text-xs font-bold text-[#8C827A] uppercase tracking-wider">
-                  Hyderabad Locations
-                </div>
-                <div className="grid grid-cols-2 gap-1.5 mt-1">
-                  {siteConfig.navigation.locationsDropdown.map((loc) => (
-                    <a
-                      key={loc.href}
-                      href={loc.href}
-                      onClick={(e) => handleNavClick(e, loc.href)}
-                      className="px-3 py-2.5 rounded-lg text-sm text-[#5F5A52] hover:text-[#C6922E] hover:bg-[#F8F6F1] flex items-center min-h-[40px] font-medium"
-                    >
-                      {loc.title}
-                    </a>
-                  ))}
-                </div>
+              {/* Mobile Locations Accordion */}
+              <div className="border-t border-[#E6E1D8] pt-2">
+                <button
+                  type="button"
+                  onClick={() => setMobileLocationsOpen(!mobileLocationsOpen)}
+                  className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-[#8C827A] uppercase tracking-wider hover:bg-[#F8F6F1] transition-colors cursor-pointer"
+                >
+                  <span>Hyderabad Locations ({siteConfig.navigation.locationsDropdown.length})</span>
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform duration-200 ${
+                      mobileLocationsOpen ? 'rotate-180 text-[#C6922E]' : 'text-[#8C827A]'
+                    }`}
+                  />
+                </button>
+                {mobileLocationsOpen && (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 px-1 pt-1 pb-2">
+                    {siteConfig.navigation.locationsDropdown.map((loc) => (
+                      <a
+                        key={loc.href}
+                        href={loc.href}
+                        onClick={(e) => handleNavClick(e, loc.href)}
+                        className={`px-2.5 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors flex items-center min-h-[38px] ${
+                          currentPath === loc.href
+                            ? 'bg-[#F8F6F1] text-[#C6922E] font-semibold'
+                            : 'text-[#5F5A52] hover:text-[#C6922E] hover:bg-[#F8F6F1]'
+                        }`}
+                      >
+                        {loc.title}
+                      </a>
+                    ))}
+                    <div className="col-span-2 sm:col-span-3 pt-1 border-t border-[#E6E1D8]/60">
+                      <a
+                        href="/locations"
+                        onClick={(e) => handleNavClick(e, '/locations')}
+                        className="inline-flex items-center text-xs font-semibold text-[#C6922E] hover:text-[#A8751F] px-2.5 py-1"
+                      >
+                        All Hyderabad Areas →
+                      </a>
+                    </div>
+                  </div>
+                )}
               </div>
 
-              <div className="border-t border-[#E6E1D8] pt-3 flex flex-col space-y-1">
-                <a
-                  href="/services"
-                  onClick={(e) => handleNavClick(e, '/services')}
-                  className="px-3 py-2.5 rounded-xl text-sm font-medium text-[#5F5A52] hover:bg-[#F8F6F1] flex items-center min-h-[44px]"
-                >
-                  Services
-                </a>
-                <a
-                  href="/guides"
-                  onClick={(e) => handleNavClick(e, '/guides')}
-                  className="px-3 py-2.5 rounded-xl text-sm font-medium text-[#5F5A52] hover:bg-[#F8F6F1] flex items-center min-h-[44px]"
-                >
-                  Guides & Etiquette
-                </a>
-                <a
-                  href="/safety"
-                  onClick={(e) => handleNavClick(e, '/safety')}
-                  className="px-3 py-2.5 rounded-xl text-sm font-medium text-[#C6922E] hover:bg-[#F8F6F1] flex items-center min-h-[44px]"
-                >
-                  Safety & Discretion
-                </a>
-                <a
-                  href="/faq"
-                  onClick={(e) => handleNavClick(e, '/faq')}
-                  className="px-3 py-2.5 rounded-xl text-sm font-medium text-[#5F5A52] hover:bg-[#F8F6F1] flex items-center min-h-[44px]"
-                >
-                  FAQ
-                </a>
-                <a
-                  href="/contact"
-                  onClick={(e) => handleNavClick(e, '/contact')}
-                  className="px-3 py-2.5 rounded-xl text-sm font-medium text-[#5F5A52] hover:bg-[#F8F6F1] flex items-center min-h-[44px]"
-                >
-                  Contact Concierge
-                </a>
+              {/* Secondary Navigation Links */}
+              <div className="border-t border-[#E6E1D8] pt-2 flex flex-col space-y-0.5">
+                {[
+                  { title: 'Services & Occasions', href: '/services' },
+                  { title: 'Guides & Etiquette', href: '/guides' },
+                  { title: 'Safety & Discretion', href: '/safety' },
+                  { title: 'Frequently Asked Questions', href: '/faq' },
+                  { title: 'Contact Concierge', href: '/contact' },
+                ].map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    onClick={(e) => handleNavClick(e, link.href)}
+                    className={`px-3 py-2 rounded-xl text-sm font-medium transition-colors flex items-center min-h-[40px] ${
+                      currentPath === link.href
+                        ? 'bg-[#F8F6F1] text-[#C6922E] font-semibold'
+                        : 'text-[#5F5A52] hover:bg-[#F8F6F1] hover:text-[#171717]'
+                    }`}
+                  >
+                    {link.title}
+                  </a>
+                ))}
+              </div>
+
+              {/* Confidentiality Footer Note */}
+              <div className="border-t border-[#E6E1D8] pt-3 text-center pb-2 text-[11px] text-[#8C827A]">
+                <p className="font-semibold text-[#5F5A52]">Discreet & Confidential</p>
+                <p>18+ Hyderabad Escorts & Companions Directory</p>
               </div>
             </div>
           </div>

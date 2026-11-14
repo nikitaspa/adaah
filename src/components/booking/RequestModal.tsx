@@ -183,16 +183,16 @@ export function RequestModal({
         className="w-full max-w-xl rounded-2xl bg-[#11141d] border border-[#262c3e] shadow-2xl text-stone-100 overflow-hidden flex flex-col max-h-[92vh]"
       >
         {/* Modal Header */}
-        <div className="px-5 py-4 border-b border-[#202637] flex items-center justify-between bg-[#141824]">
+        <div className="px-4 sm:px-5 py-3.5 sm:py-4 border-b border-[#202637] flex items-center justify-between bg-[#141824]">
           <div className="flex items-center space-x-2.5">
-            <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+            <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-base sm:text-lg font-serif-display font-bold text-stone-50">
+              <h2 className="text-sm sm:text-lg font-serif-display font-bold text-stone-50">
                 Discreet Companion Inquiry
               </h2>
-              <p className="text-[11px] text-amber-400 font-medium tracking-wide">
+              <p className="text-[10px] sm:text-[11px] text-amber-400 font-medium tracking-wide">
                 Step {confirmationCode ? 'Complete' : `${step} of 7`} • 18+ Private Arrangement
               </p>
             </div>
@@ -200,7 +200,7 @@ export function RequestModal({
           <button
             type="button"
             onClick={handleClose}
-            className="p-1.5 rounded-lg text-stone-400 hover:text-stone-100 hover:bg-[#1f2537] transition-colors"
+            className="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-lg text-stone-400 hover:text-stone-100 hover:bg-[#1f2537] transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -217,7 +217,7 @@ export function RequestModal({
         )}
 
         {/* Modal Body */}
-        <div className="p-5 sm:p-6 overflow-y-auto flex-1">
+        <div className="p-4 sm:p-6 overflow-y-auto flex-1">
           {confirmationCode ? (
             /* Confirmation Screen */
             <div className="text-center py-6 space-y-5 animate-in zoom-in-95">

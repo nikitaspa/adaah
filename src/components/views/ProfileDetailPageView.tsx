@@ -740,7 +740,7 @@ export function ProfileDetailPageView({
               </button>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
               {similarProfiles.slice(0, 4).map((sim) => (
                 <div
                   key={sim.id}
@@ -754,12 +754,12 @@ export function ProfileDetailPageView({
                       className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
                       referrerPolicy="no-referrer"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                    <div className="absolute bottom-3 left-3 right-3 text-white">
-                      <div className="text-sm font-bold font-serif-display text-white">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                    <div className="absolute bottom-2.5 sm:bottom-3 left-2.5 sm:left-3 right-2.5 sm:right-3 text-white">
+                      <div className="text-xs sm:text-sm font-bold font-serif-display text-white truncate">
                         {sim.name}, {sim.age}
                       </div>
-                      <div className="text-[11px] text-stone-200">
+                      <div className="text-[10px] sm:text-[11px] text-stone-200 truncate">
                         {sim.area || sim.neighborhood} • {formatCurrency(sim.priceFrom || 10000)}
                       </div>
                     </div>

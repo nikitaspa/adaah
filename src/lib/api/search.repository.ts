@@ -22,7 +22,6 @@ export interface ISearchRepository {
 export class MockSearchRepository implements ISearchRepository {
   async getSuggestions(query: string, limit: number = 8): Promise<SearchSuggestionItem[]> {
     if (!query || query.trim().length < 1) return [];
-    await new Promise((resolve) => setTimeout(resolve, 30));
 
     const q = query.toLowerCase().trim();
     const suggestions: SearchSuggestionItem[] = [];
@@ -95,7 +94,6 @@ export class MockSearchRepository implements ISearchRepository {
   }
 
   async searchGlobal(query: string): Promise<GlobalSearchResult> {
-    await new Promise((resolve) => setTimeout(resolve, 80));
     const q = query.toLowerCase().trim();
 
     if (!q) {
@@ -152,13 +150,16 @@ export class MockSearchRepository implements ISearchRepository {
 
   async getPopularSearches(): Promise<string[]> {
     return [
-      'Residential Architecture',
-      'San Francisco Bay Area',
-      'Estate Planning & Living Trust',
-      'Somatic Bodywork',
-      'Private Chef Tasting',
-      'Bespoke Tailoring',
-      'Seattle Metro',
+      'Banjara Hills',
+      'Jubilee Hills',
+      'Hitech City',
+      'Gachibowli',
+      'VIP Companions',
+      'Dinner Companions',
+      'Madhapur',
+      'Independent Companions',
+      'Hotel Suite Outcall',
+      'Kondapur',
     ];
   }
 }

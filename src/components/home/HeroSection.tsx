@@ -30,14 +30,14 @@ export function HeroSection({
   return (
     <section
       id="homepage-hero-section"
-      className="relative overflow-hidden pt-12 pb-16 md:pt-18 md:pb-24 border-b border-[#E6E1D8] bg-[#F8F6F1]"
+      className="relative overflow-hidden pt-8 pb-12 sm:pt-14 sm:pb-18 md:pt-20 md:pb-24 border-b border-[#E6E1D8] bg-[#F8F6F1]"
     >
       {/* Subtle warm ambient depth */}
       <div className="absolute top-0 right-1/4 h-80 w-80 rounded-full bg-[#C6922E]/5 blur-[90px] pointer-events-none" />
       <div className="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-[#E6E1D8]/40 blur-[80px] pointer-events-none" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center text-center max-w-3xl mx-auto space-y-6">
+        <div className="flex flex-col items-center text-center max-w-3xl mx-auto space-y-4 sm:space-y-6">
           {/* Eyebrow badge */}
           <div className="flex flex-wrap items-center justify-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-[#E6E1D8] shadow-2xs text-[11px] sm:text-xs font-semibold text-[#171717]">
             <span className="w-2 h-2 rounded-full bg-[#C6922E]" />
@@ -49,12 +49,12 @@ export function HeroSection({
           </div>
 
           {/* Main Display Headline */}
-          <h1 className="font-serif-display text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[#171717] leading-[1.15] break-words">
+          <h1 className="font-serif-display text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[#171717] leading-[1.2] break-words">
             Discover Premium Companionship in Hyderabad
           </h1>
 
           {/* Supporting Subtitle */}
-          <p className="text-sm sm:text-lg text-[#5F5A52] leading-relaxed max-w-2xl font-normal">
+          <p className="text-xs sm:text-base md:text-lg text-[#5F5A52] leading-relaxed max-w-2xl font-normal">
             Explore verified profiles, premier locations and refined services across Hyderabad.
           </p>
 

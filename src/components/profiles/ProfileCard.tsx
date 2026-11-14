@@ -35,9 +35,12 @@ export function ProfileCard({
         <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#F3F0E9]">
           <img
             src={displayImage}
-            alt={`Fictional adult profile portrait for Adaah directory — ${profile.name}`}
+            alt={`Verified companion profile in Hyderabad — ${profile.name}`}
             className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
             loading="lazy"
+            decoding="async"
+            width="400"
+            height="500"
           />
 
           {/* Top badges: Verification badge & 40% OFF badge */}

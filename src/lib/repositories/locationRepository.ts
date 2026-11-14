@@ -21,7 +21,6 @@ export class MockLocationRepository implements ILocationRepository {
   }
 
   async getPopularLocations(limit: number = 9): Promise<Location[]> {
-    await new Promise((resolve) => setTimeout(resolve, 30));
     // Prioritize the 9 primary Hyderabad locations
     const primarySlugs = [
       'banjara-hills',
@@ -42,12 +41,10 @@ export class MockLocationRepository implements ILocationRepository {
   }
 
   async getFeaturedLocations(): Promise<Location[]> {
-    await new Promise((resolve) => setTimeout(resolve, 30));
     return mockLocations.filter((loc) => loc.featured);
   }
 
   async getLocationBySlug(slug: string): Promise<Location | null> {
-    await new Promise((resolve) => setTimeout(resolve, 30));
     const location = mockLocations.find(
       (loc) => loc.slug === slug || loc.id === slug || loc.id === `loc-${slug}`
     );
@@ -55,13 +52,11 @@ export class MockLocationRepository implements ILocationRepository {
   }
 
   async getLocationById(id: string): Promise<Location | null> {
-    await new Promise((resolve) => setTimeout(resolve, 30));
     const location = mockLocations.find((loc) => loc.id === id);
     return location || null;
   }
 
   async getNearbyLocations(locationId: string, limit: number = 3): Promise<Location[]> {
-    await new Promise((resolve) => setTimeout(resolve, 30));
     return mockLocations.filter((loc) => loc.id !== locationId).slice(0, limit);
   }
 }

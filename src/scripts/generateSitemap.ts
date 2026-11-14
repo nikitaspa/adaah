@@ -8,7 +8,7 @@ import { mockGuides } from '../data/guides';
 import { SEO_CONFIG } from '../config/seo';
 
 export function generateSitemapXml(): string {
-  const baseUrl = SEO_CONFIG.siteUrl;
+  const baseUrl = 'https://adaah.life';
   const today = new Date().toISOString().split('T')[0];
 
   const staticRoutes = [
@@ -94,10 +94,8 @@ export function generateSitemapXml(): string {
   return xml;
 }
 
-// Write to public/sitemap.xml if executed directly
-if (require.main === module) {
-  const xmlContent = generateSitemapXml();
-  const outputPath = path.resolve(__dirname, '../../public/sitemap.xml');
-  fs.writeFileSync(outputPath, xmlContent, 'utf8');
-  console.log(`Successfully generated sitemap.xml at ${outputPath}`);
-}
+// Write to public/sitemap.xml if executed directly or imported
+const xmlContent = generateSitemapXml();
+const outputPath = path.resolve(process.cwd(), 'public/sitemap.xml');
+fs.writeFileSync(outputPath, xmlContent, 'utf8');
+console.log(`Successfully generated sitemap.xml at ${outputPath}`);

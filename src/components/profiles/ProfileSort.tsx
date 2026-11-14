@@ -10,17 +10,19 @@ export interface ProfileSortProps {
 
 export function ProfileSort({ value, onChange, className = '' }: ProfileSortProps) {
   return (
-    <div className={`flex items-center gap-2 ${className}`}>
-      <ArrowUpDown className="h-4 w-4 text-stone-400 shrink-0" />
-      <span className="text-xs font-semibold text-stone-500 shrink-0 hidden sm:inline">
-        Sort by:
-      </span>
+    <div className={`flex items-center justify-between sm:justify-start gap-2 w-full sm:w-auto ${className}`}>
+      <div className="flex items-center gap-1.5 shrink-0">
+        <ArrowUpDown className="h-4 w-4 text-[#8C827A] shrink-0" />
+        <span className="text-xs font-semibold text-[#5F5A52] shrink-0">
+          Sort:
+        </span>
+      </div>
       <select
         id="profile-sort-select"
         aria-label="Sort directory by"
         value={value}
         onChange={(e) => onChange(e.target.value as SortOption)}
-        className="h-10 rounded-xl border border-stone-300 bg-white px-3 py-1 text-xs font-semibold text-stone-800 focus:outline-none focus:ring-2 focus:ring-slate-900 cursor-pointer shadow-2xs"
+        className="h-10 rounded-xl border border-[#E6E1D8] bg-white px-3 py-1 text-xs font-semibold text-[#171717] focus:outline-none focus:border-[#C6922E] cursor-pointer shadow-2xs flex-1 sm:flex-initial"
       >
         <option value="recommended">Recommended & Featured</option>
         <option value="rating_desc">Highest Rated</option>

@@ -38,9 +38,9 @@ export function TrustIndicators() {
                 {item.icon}
               </div>
               <div className="space-y-1">
-                <h3 className="font-serif-display text-base font-bold text-[#171717]">
+                <h2 className="font-serif-display text-base font-bold text-[#171717]">
                   {item.title}
-                </h3>
+                </h2>
                 <p className="text-xs text-[#5F5A52] leading-relaxed">
                   {item.description}
                 </p>

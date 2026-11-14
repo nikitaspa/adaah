@@ -8,7 +8,6 @@ export interface IFaqRepository {
 
 export class MockFaqRepository implements IFaqRepository {
   async getFaqs(category?: string, query?: string): Promise<FAQ[]> {
-    await new Promise((resolve) => setTimeout(resolve, 30));
     let items = [...mockFaqs];
 
     if (category && category !== 'All') {

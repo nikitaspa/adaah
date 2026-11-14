@@ -44,7 +44,7 @@ export function FeaturedProfiles({
         </div>
 
         {/* 6–8 Featured Profile Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {profiles.slice(0, 8).map((profile) => (
             <ProfileCard
               key={profile.id}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Phone } from 'lucide-react';
 import { siteConfig } from '../../config/site';
+import { cn } from '../../lib/utils';
 
 export interface CallButtonProps {
   className?: string;
@@ -24,20 +25,16 @@ export function CallButton({
   return (
     <a
       href={`tel:${siteConfig.contact.phoneRaw}`}
-      aria-label={`Call ${siteConfig.contact.phone}`}
-      className={`inline-flex items-center justify-center font-semibold bg-[#171717] hover:bg-[#2A2622] text-[#F8F6F1] border border-[#3E382E] shadow-sm transition-all duration-200 active:scale-[0.98] cursor-pointer select-none whitespace-nowrap ${
-        sizeClasses[size]
-      } ${fullWidth ? 'w-full' : ''} ${className}`}
+      aria-label={`Call Now: ${siteConfig.contact.phone}`}
+      className={cn(
+        'inline-flex items-center justify-center font-semibold bg-[#171717] hover:bg-[#2A2622] text-[#F8F6F1] border border-[#3E382E] shadow-sm transition-all duration-200 active:scale-[0.98] cursor-pointer select-none whitespace-nowrap',
+        sizeClasses[size],
+        fullWidth && 'w-full',
+        className
+      )}
     >
       {showIcon && (
-        <>
-          {/* Mobile phone indicator */}
-          <span className="inline sm:hidden text-sm leading-none" aria-hidden="true">
-            ☎
-          </span>
-          {/* Desktop icon */}
-          <Phone className="hidden sm:inline-block w-3.5 h-3.5 text-[#C6922E] shrink-0" aria-hidden="true" />
-        </>
+        <Phone className="w-3.5 h-3.5 text-[#C6922E] shrink-0" aria-hidden="true" />
       )}
       <span className="truncate">Call Now</span>
     </a>

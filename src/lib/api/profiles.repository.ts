@@ -13,7 +13,6 @@ export interface IProfileRepository {
 export class MockProfileRepository implements IProfileRepository {
   async getProfiles(params: ProfileFilterParams = {}): Promise<PaginatedResponse<Profile>> {
     // Simulating realistic asynchronous client/server repository latency
-    await new Promise((resolve) => setTimeout(resolve, 80));
 
     let items = [...mockProfiles];
 
@@ -140,20 +139,24 @@ export class MockProfileRepository implements IProfileRepository {
   }
 
   async getFeaturedProfiles(limit: number = 6): Promise<Profile[]> {
-    await new Promise((resolve) => setTimeout(resolve, 50));
     return mockProfiles
       .filter((p) => p.featured)
       .slice(0, limit);
   }
 
   async getProfileBySlug(slug: string): Promise<Profile | null> {
-    await new Promise((resolve) => setTimeout(resolve, 60));
-    const profile = mockProfiles.find((p) => p.slug === slug);
+    const clean = slug.toLowerCase().trim();
+    const profile = mockProfiles.find(
+      (p) =>
+        p.slug === clean ||
+        p.slug.startsWith(`${clean}-`) ||
+        p.name.toLowerCase() === clean ||
+        p.id.toLowerCase() === clean
+    );
     return profile || null;
   }
 
   async getRelatedProfiles(profileId: string, limit: number = 3): Promise<Profile[]> {
-    await new Promise((resolve) => setTimeout(resolve, 40));
     const current = mockProfiles.find((p) => p.id === profileId);
     if (!current) return mockProfiles.slice(0, limit);
 
@@ -168,12 +171,10 @@ export class MockProfileRepository implements IProfileRepository {
   }
 
   async getProfilesByLocation(locationId: string): Promise<Profile[]> {
-    await new Promise((resolve) => setTimeout(resolve, 40));
     return mockProfiles.filter((p) => p.locationId === locationId);
   }
 
   async getProfilesByCategory(categoryId: string): Promise<Profile[]> {
-    await new Promise((resolve) => setTimeout(resolve, 40));
     return mockProfiles.filter((p) => p.categoryIds.includes(categoryId));
   }
 }

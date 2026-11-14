@@ -1,12 +1,15 @@
+import { siteConfig } from './site';
+
 export const SEO_CONFIG = {
-  siteName: 'Adaah',
-  fullName: 'Adaah — Hyderabad 18+ Private Directory',
-  siteUrl: (typeof process !== 'undefined' && (process.env as any)?.NEXT_PUBLIC_SITE_URL) || (import.meta as any).env?.VITE_SITE_URL || 'https://adaah.life',
+  siteName: siteConfig.name,
+  fullName: siteConfig.fullName,
+  siteUrl: siteConfig.url,
+  domain: siteConfig.domain,
   defaultTitle: 'Adaah | Hyderabad 18+ Private Directory',
   titleTemplate: '%s | Adaah',
   defaultDescription:
     'Explore Adaah, a premier Hyderabad-focused 18+ private directory featuring location-based listings, verified companion profiles, services and discretion guides in Banjara Hills, Jubilee Hills, Gachibowli, and Hitech City.',
-  defaultImage: 'https://adaah.life/images/profiles/profile-001.webp',
+  defaultImage: `${siteConfig.url}/images/profiles/profile-001.webp`,
   locale: 'en_IN',
   language: 'en-IN',
   country: 'IN',
@@ -17,9 +20,9 @@ export const SEO_CONFIG = {
   googleAnalyticsId: (typeof process !== 'undefined' && (process.env as any)?.NEXT_PUBLIC_GA_ID) || (import.meta as any).env?.VITE_GA_ID || 'G-N6HWPBLGXY',
 
   organization: {
-    name: 'Adaah',
-    url: 'https://adaah.life',
-    logo: 'https://adaah.life/favicon.png',
+    name: siteConfig.name,
+    url: siteConfig.url,
+    logo: `${siteConfig.url}/favicon.png`,
     description: 'Premier 18+ private directory focused on Hyderabad, Telangana, India.',
     address: {
       addressLocality: 'Hyderabad',
@@ -27,7 +30,7 @@ export const SEO_CONFIG = {
       addressCountry: 'IN',
     },
     contactPoint: {
-      telephone: '+91 89993 84340',
+      telephone: siteConfig.contact.phone,
       contactType: 'customer service',
       areaServed: 'IN',
       availableLanguage: ['en', 'hi', 'te'],

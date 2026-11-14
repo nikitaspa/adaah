@@ -27,7 +27,7 @@ export function ProfileFilterDrawer({
     <div
       role="dialog"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex flex-col justify-end sm:hidden animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 flex flex-col justify-end sm:items-center sm:justify-center sm:p-4 lg:hidden animate-in fade-in duration-200"
     >
       <div
         className="fixed inset-0 bg-stone-950/60 backdrop-blur-xs"
@@ -35,7 +35,7 @@ export function ProfileFilterDrawer({
         aria-hidden="true"
       />
 
-      <div className="relative z-10 w-full max-h-[85vh] rounded-t-3xl bg-white shadow-2xl flex flex-col overflow-hidden">
+      <div className="relative z-10 w-full sm:max-w-lg max-h-[85vh] rounded-t-3xl sm:rounded-2xl bg-white shadow-2xl flex flex-col overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-stone-200 shrink-0">
           <div>

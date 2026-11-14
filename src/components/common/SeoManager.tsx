@@ -17,7 +17,7 @@ export function SeoManager({ currentPath }: SeoManagerProps) {
     const pathOnly = currentPath.split('?')[0] || '/';
     const queryString = window.location.search || '';
     const canonicalUrl = createCanonicalUrl(pathOnly);
-    const isNoindex = shouldNoindexQuery(queryString);
+    let isNoindex = shouldNoindexQuery(queryString);
 
     let schemaList: Record<string, unknown>[] = [
       {
@@ -162,6 +162,11 @@ export function SeoManager({ currentPath }: SeoManagerProps) {
     } else if (pathOnly === '/privacy') {
       title = 'Privacy Policy & Discretion Pledge | Adaah';
       description = 'How Adaah protects patron privacy, enforces non-retention data standards, and ensures confidential browsing.';
+    } else {
+      // 404 Fallback for unmatched routes
+      title = 'Page Not Found (404) | Adaah';
+      description = 'The requested page could not be found on Adaah directory.';
+      isNoindex = true;
     }
 
     // Set document title

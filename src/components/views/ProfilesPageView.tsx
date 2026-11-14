@@ -198,12 +198,12 @@ export function ProfilesPageView({
           {/* Results Column */}
           <div className="lg:col-span-3 space-y-6">
             {/* Control Bar: Mobile Filter Button, Results Count, Sorting */}
-            <div className="flex items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-[#E6E1D8] shadow-2xs">
-              <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 bg-white p-4 rounded-2xl border border-[#E6E1D8] shadow-2xs">
+              <div className="flex items-center justify-between sm:justify-start gap-3">
                 <button
                   type="button"
                   onClick={() => setIsMobileFilterOpen(true)}
-                  className="lg:hidden flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#F8F6F1] text-[#171717] border border-[#E6E1D8] text-xs font-semibold cursor-pointer"
+                  className="lg:hidden flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#F8F6F1] text-[#171717] border border-[#E6E1D8] text-xs font-semibold cursor-pointer active:scale-95"
                 >
                   <Filter className="h-4 w-4 text-[#C6922E]" />
                   <span>Filters {activeChips.length > 0 && `(${activeChips.length})`}</span>

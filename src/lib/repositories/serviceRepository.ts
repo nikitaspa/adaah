@@ -20,12 +20,10 @@ export class MockServiceRepository implements IServiceRepository {
   }
 
   async getPopularServices(): Promise<Service[]> {
-    await new Promise((resolve) => setTimeout(resolve, 30));
     return mockServices.filter((s) => s.popular);
   }
 
   async getServiceBySlug(slug: string): Promise<Service | null> {
-    await new Promise((resolve) => setTimeout(resolve, 30));
     const service = mockServices.find(
       (s) => s.slug === slug || s.id === slug || s.id === `srv-${slug}`
     );
@@ -33,13 +31,11 @@ export class MockServiceRepository implements IServiceRepository {
   }
 
   async getServiceById(id: string): Promise<Service | null> {
-    await new Promise((resolve) => setTimeout(resolve, 30));
     const service = mockServices.find((s) => s.id === id);
     return service || null;
   }
 
   async getServicesByCategory(categoryId: string): Promise<Service[]> {
-    await new Promise((resolve) => setTimeout(resolve, 30));
     return mockServices.filter((s) => s.categoryId === categoryId);
   }
 }

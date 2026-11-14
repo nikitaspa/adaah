@@ -17,7 +17,6 @@ export class MockProfileRepository implements IProfileRepository {
   }
 
   async getProfiles(params: ProfileFilterParams = {}): Promise<PaginatedResponse<Profile>> {
-    await new Promise((resolve) => setTimeout(resolve, 60));
 
     let items = [...mockProfiles];
 
@@ -148,18 +147,15 @@ export class MockProfileRepository implements IProfileRepository {
   }
 
   async getFeaturedProfiles(limit: number = 8): Promise<Profile[]> {
-    await new Promise((resolve) => setTimeout(resolve, 40));
     return mockProfiles.filter((p) => p.featured).slice(0, limit);
   }
 
   async getProfileBySlug(slug: string): Promise<Profile | null> {
-    await new Promise((resolve) => setTimeout(resolve, 50));
     const profile = mockProfiles.find((p) => p.slug === slug);
     return profile || null;
   }
 
   async getRelatedProfiles(profileId: string, limit: number = 3): Promise<Profile[]> {
-    await new Promise((resolve) => setTimeout(resolve, 40));
     const current = mockProfiles.find((p) => p.id === profileId);
     if (!current) return mockProfiles.slice(0, limit);
 
@@ -173,7 +169,6 @@ export class MockProfileRepository implements IProfileRepository {
   }
 
   async getProfilesByLocation(locationIdOrSlug: string): Promise<Profile[]> {
-    await new Promise((resolve) => setTimeout(resolve, 40));
     const normalized = locationIdOrSlug.toLowerCase().replace(/^loc-/, '').replace(/\s+/g, '-');
     return mockProfiles.filter((p) => {
       const areaSlug = p.area.toLowerCase().replace(/\s+/g, '-');
@@ -183,7 +178,6 @@ export class MockProfileRepository implements IProfileRepository {
   }
 
   async getProfilesByCategory(categoryIdOrSlug: string): Promise<Profile[]> {
-    await new Promise((resolve) => setTimeout(resolve, 40));
     const normalized = categoryIdOrSlug.toLowerCase().replace(/^cat-/, '').replace(/\s+/g, '-');
     return mockProfiles.filter((p) => {
       const catSlug = p.category.toLowerCase().replace(/\s+/g, '-');

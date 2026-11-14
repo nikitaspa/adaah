@@ -4,7 +4,8 @@ export const siteConfig = {
   tagline: '18+ Private Directory',
   description:
     'Browse verified adult profiles, explore Hyderabad metropolitan locations, and discover discreet companionship services across India.',
-  url: 'https://adaah-directory.com',
+  url: 'https://adaah.life',
+  domain: 'adaah.life',
   ogImage: '/images/profiles/profile-001.webp',
   contact: {
     phone: '+91 89993 84340',
@@ -15,7 +16,7 @@ export const siteConfig = {
     whatsappUrl: 'https://wa.me/918999384340',
     whatsappRaw: '918999384340',
     defaultWhatsAppMessage: 'Hello Adaah Concierge, I would like to make an inquiry.',
-    email: 'concierge@adaah-directory.com',
+    email: 'concierge@adaah.life',
     supportPhone: '+91 89993 84340',
     address: 'Banjara Hills & Jubilee Hills, Hyderabad, India',
     workingHours: 'Daily, 10:00 AM – 02:00 AM IST',

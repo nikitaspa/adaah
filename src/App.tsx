@@ -1,32 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
 import { ToastProvider } from './components/common/Toast';
-import { SearchModal } from './components/search/SearchModal';
-import { RequestModal } from './components/booking/RequestModal';
 import { AgeGateModal } from './components/common/AgeGateModal';
 import { SeoManager } from './components/common/SeoManager';
 import { GoogleAnalytics } from './components/common/GoogleAnalytics';
 import { StickyMobileCta } from './components/layout/StickyMobileCta';
-
 import { HomePageView } from './components/views/HomePageView';
-import { ProfilesPageView } from './components/views/ProfilesPageView';
-import { ProfileDetailPageView } from './components/views/ProfileDetailPageView';
-import { LocationsPageView } from './components/views/LocationsPageView';
-import { LocationDetailPageView } from './components/views/LocationDetailPageView';
-import { CategoriesPageView } from './components/views/CategoriesPageView';
-import { CategoryDetailPageView } from './components/views/CategoryDetailPageView';
-import { ServicesPageView } from './components/views/ServicesPageView';
-import { ServiceDetailPageView } from './components/views/ServiceDetailPageView';
-import { FaqPageView } from './components/views/FaqPageView';
-import { BlogPageView } from './components/views/BlogPageView';
-import { BlogPostPageView } from './components/views/BlogPostPageView';
-import { SafetyPageView } from './components/views/SafetyPageView';
-import { AboutPageView } from './components/views/AboutPageView';
-import { ContactPageView } from './components/views/ContactPageView';
-import { TermsPageView } from './components/views/TermsPageView';
-import { PrivacyPageView } from './components/views/PrivacyPageView';
-import { NotFoundPageView } from './components/views/NotFoundPageView';
+
+// Route-level code-splitting (lazy loading sub-views and modals for optimal initial mobile bundle)
+const ProfilesPageView = lazy(() => import('./components/views/ProfilesPageView').then(m => ({ default: m.ProfilesPageView })));
+const ProfileDetailPageView = lazy(() => import('./components/views/ProfileDetailPageView').then(m => ({ default: m.ProfileDetailPageView })));
+const LocationsPageView = lazy(() => import('./components/views/LocationsPageView').then(m => ({ default: m.LocationsPageView })));
+const LocationDetailPageView = lazy(() => import('./components/views/LocationDetailPageView').then(m => ({ default: m.LocationDetailPageView })));
+const CategoriesPageView = lazy(() => import('./components/views/CategoriesPageView').then(m => ({ default: m.CategoriesPageView })));
+const CategoryDetailPageView = lazy(() => import('./components/views/CategoryDetailPageView').then(m => ({ default: m.CategoryDetailPageView })));
+const ServicesPageView = lazy(() => import('./components/views/ServicesPageView').then(m => ({ default: m.ServicesPageView })));
+const ServiceDetailPageView = lazy(() => import('./components/views/ServiceDetailPageView').then(m => ({ default: m.ServiceDetailPageView })));
+const FaqPageView = lazy(() => import('./components/views/FaqPageView').then(m => ({ default: m.FaqPageView })));
+const BlogPageView = lazy(() => import('./components/views/BlogPageView').then(m => ({ default: m.BlogPageView })));
+const BlogPostPageView = lazy(() => import('./components/views/BlogPostPageView').then(m => ({ default: m.BlogPostPageView })));
+const SafetyPageView = lazy(() => import('./components/views/SafetyPageView').then(m => ({ default: m.SafetyPageView })));
+const AboutPageView = lazy(() => import('./components/views/AboutPageView').then(m => ({ default: m.AboutPageView })));
+const ContactPageView = lazy(() => import('./components/views/ContactPageView').then(m => ({ default: m.ContactPageView })));
+const TermsPageView = lazy(() => import('./components/views/TermsPageView').then(m => ({ default: m.TermsPageView })));
+const PrivacyPageView = lazy(() => import('./components/views/PrivacyPageView').then(m => ({ default: m.PrivacyPageView })));
+const NotFoundPageView = lazy(() => import('./components/views/NotFoundPageView').then(m => ({ default: m.NotFoundPageView })));
+
+const SearchModal = lazy(() => import('./components/search/SearchModal').then(m => ({ default: m.SearchModal })));
+const RequestModal = lazy(() => import('./components/booking/RequestModal').then(m => ({ default: m.RequestModal })));
 
 import { Profile, Service, SearchSuggestionItem } from './types';
 
@@ -254,7 +256,7 @@ export default function App() {
       <div className="flex min-h-screen flex-col bg-[#F8F6F1] text-[#171717] selection:bg-[#C6922E]/30 selection:text-[#171717] font-sans antialiased">
         {/* Dynamic SEO, Meta & Structured Data */}
         <SeoManager currentPath={currentPath} />
-        <GoogleAnalytics />
+        <GoogleAnalytics currentPath={currentPath} />
 
         {/* Global Navigation Header */}
         <Header
@@ -265,7 +267,17 @@ export default function App() {
         />
 
         {/* Dynamic View Router */}
-        <main className="flex-1 pb-16 md:pb-0">{renderView()}</main>
+        <main className="flex-1 pb-16 md:pb-0">
+          <Suspense
+            fallback={
+              <div className="min-h-[50vh] flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full border-2 border-[#C6922E] border-t-transparent animate-spin" />
+              </div>
+            }
+          >
+            {renderView()}
+          </Suspense>
+        </main>
 
         {/* Global Footer */}
         <Footer onNavigate={navigate} />
@@ -276,25 +288,33 @@ export default function App() {
         {/* 18+ Verification Age Gate Modal */}
         <AgeGateModal />
 
-        {/* Global Command+K Search Modal */}
-        <SearchModal
-          isOpen={isSearchOpen}
-          onClose={() => setIsSearchOpen(false)}
-          onSelectSuggestion={handleSelectSuggestion}
-          onSubmitSearch={handleSubmitSearch}
-        />
+        {/* Global Command+K Search Modal (lazy loaded on demand) */}
+        {isSearchOpen && (
+          <Suspense fallback={null}>
+            <SearchModal
+              isOpen={isSearchOpen}
+              onClose={() => setIsSearchOpen(false)}
+              onSelectSuggestion={handleSelectSuggestion}
+              onSubmitSearch={handleSubmitSearch}
+            />
+          </Suspense>
+        )}
 
-        {/* Global Service / Companion Request Modal */}
-        <RequestModal
-          isOpen={isRequestOpen}
-          onClose={() => {
-            setIsRequestOpen(false);
-            setSelectedProfile(null);
-            setSelectedService(null);
-          }}
-          initialProfile={selectedProfile}
-          initialService={selectedService}
-        />
+        {/* Global Service / Companion Request Modal (lazy loaded on demand) */}
+        {isRequestOpen && (
+          <Suspense fallback={null}>
+            <RequestModal
+              isOpen={isRequestOpen}
+              onClose={() => {
+                setIsRequestOpen(false);
+                setSelectedProfile(null);
+                setSelectedService(null);
+              }}
+              initialProfile={selectedProfile}
+              initialService={selectedService}
+            />
+          </Suspense>
+        )}
       </div>
     </ToastProvider>
   );

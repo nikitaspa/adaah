@@ -19,12 +19,10 @@ export class MockCategoryRepository implements ICategoryRepository {
   }
 
   async getFeaturedCategories(): Promise<Category[]> {
-    await new Promise((resolve) => setTimeout(resolve, 30));
     return mockCategories.filter((cat) => cat.featured);
   }
 
   async getCategoryBySlug(slug: string): Promise<Category | null> {
-    await new Promise((resolve) => setTimeout(resolve, 30));
     const category = mockCategories.find(
       (cat) => cat.slug === slug || cat.id === slug || cat.id === `cat-${slug}`
     );
@@ -32,7 +30,6 @@ export class MockCategoryRepository implements ICategoryRepository {
   }
 
   async getCategoryById(id: string): Promise<Category | null> {
-    await new Promise((resolve) => setTimeout(resolve, 30));
     const category = mockCategories.find((cat) => cat.id === id);
     return category || null;
   }

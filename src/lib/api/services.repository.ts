@@ -11,7 +11,6 @@ export interface IServiceRepository {
 
 export class MockServiceRepository implements IServiceRepository {
   async getServices(categoryId?: string): Promise<Service[]> {
-    await new Promise((resolve) => setTimeout(resolve, 40));
     if (categoryId && categoryId !== 'all') {
       return mockServices.filter((s) => s.categoryId === categoryId);
     }
@@ -19,22 +18,18 @@ export class MockServiceRepository implements IServiceRepository {
   }
 
   async getPopularServices(): Promise<Service[]> {
-    await new Promise((resolve) => setTimeout(resolve, 30));
     return mockServices.filter((s) => s.popular);
   }
 
   async getServiceBySlug(slug: string): Promise<Service | null> {
-    await new Promise((resolve) => setTimeout(resolve, 50));
     return mockServices.find((s) => s.slug === slug) || null;
   }
 
   async getServiceById(id: string): Promise<Service | null> {
-    await new Promise((resolve) => setTimeout(resolve, 30));
     return mockServices.find((s) => s.id === id) || null;
   }
 
   async getRelatedServices(serviceId: string, limit: number = 3): Promise<Service[]> {
-    await new Promise((resolve) => setTimeout(resolve, 30));
     const current = mockServices.find((s) => s.id === serviceId);
     if (!current) return mockServices.slice(0, limit);
     return mockServices

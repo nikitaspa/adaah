@@ -24,7 +24,7 @@ export function Footer({ onNavigate }: FooterProps) {
   ];
 
   return (
-    <footer id="main-site-footer" className="bg-[#F3F0E9] text-[#171717] border-t border-[#E6E1D8] pt-14 pb-12">
+    <footer id="main-site-footer" className="bg-[#F3F0E9] text-[#171717] border-t border-[#E6E1D8] pt-12 md:pt-14 pb-24 md:pb-12 safe-area-pb">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-10 pb-12 border-b border-[#E6E1D8]">
           {/* Brand & About Column */}
@@ -75,7 +75,7 @@ export function Footer({ onNavigate }: FooterProps) {
 
           {/* Quick Links */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold text-[#171717] uppercase tracking-wider">Quick Links</h4>
+            <h3 className="text-xs font-bold text-[#171717] uppercase tracking-wider">Quick Links</h3>
             <ul className="space-y-2 text-xs text-[#5F5A52]">
               <li>
                 <a href="/profiles" onClick={(e) => handleNavClick(e, '/profiles')} className="hover:text-[#C6922E] transition-colors">
@@ -112,7 +112,7 @@ export function Footer({ onNavigate }: FooterProps) {
 
           {/* Popular Hyderabad Areas */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold text-[#171717] uppercase tracking-wider">Popular Areas</h4>
+            <h3 className="text-xs font-bold text-[#171717] uppercase tracking-wider">Popular Areas</h3>
             <ul className="space-y-2 text-xs text-[#5F5A52]">
               {hyderabadAreas.map((area) => (
                 <li key={area.slug}>
@@ -130,7 +130,7 @@ export function Footer({ onNavigate }: FooterProps) {
 
           {/* Legal & Compliance */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold text-[#171717] uppercase tracking-wider">Legal & Compliance</h4>
+            <h3 className="text-xs font-bold text-[#171717] uppercase tracking-wider">Legal & Compliance</h3>
             <ul className="space-y-2 text-xs text-[#5F5A52]">
               <li>
                 <a href="/safety" onClick={(e) => handleNavClick(e, '/safety')} className="hover:text-[#C6922E] transition-colors">

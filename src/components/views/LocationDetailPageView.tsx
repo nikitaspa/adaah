@@ -114,29 +114,29 @@ export function LocationDetailPageView({
 
         {/* 2. Location Hero Header */}
         <div className="relative rounded-3xl overflow-hidden border border-[#E6E1D8] bg-white shadow-2xs">
-          <div className="relative aspect-[21/9] sm:aspect-[24/8] w-full overflow-hidden bg-[#F3F0E9]">
+          <div className="relative min-h-[300px] sm:min-h-[260px] md:min-h-0 md:aspect-[21/9] lg:aspect-[24/8] w-full overflow-hidden bg-[#F3F0E9] flex flex-col justify-end">
             <img
               src={location.image || location.heroImage || location.coverImage}
               alt={location.name}
-              className="h-full w-full object-cover"
+              className="absolute inset-0 h-full w-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-            <div className="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/20" />
+            <div className="relative z-10 p-5 sm:p-6 md:p-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div className="space-y-2">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 border border-[#E6E1D8] backdrop-blur-md text-xs font-bold text-[#171717] uppercase tracking-wider shadow-xs">
                   <MapPin className="w-3.5 h-3.5 text-[#C6922E]" />
                   <span>{location.city || 'Hyderabad'}, {location.state || 'Telangana'}</span>
                 </div>
-                <h1 className="font-serif-display text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight drop-shadow-sm">
+                <h1 className="font-serif-display text-2xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight drop-shadow-sm">
                   {location.name} Companions
                 </h1>
-                <p className="text-xs sm:text-sm text-stone-200 max-w-2xl drop-shadow-xs">
+                <p className="text-xs sm:text-sm text-stone-200 max-w-2xl drop-shadow-xs line-clamp-3 sm:line-clamp-none">
                   {location.description}
                 </p>
               </div>
 
-              <div className="flex items-center gap-4 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-[#E6E1D8] shadow-xs">
-                <div className="text-right">
+              <div className="flex items-center gap-4 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-[#E6E1D8] shadow-xs self-start sm:self-auto shrink-0">
+                <div className="text-left sm:text-right">
                   <span className="text-[10px] uppercase font-bold text-[#5F5A52] block">Verified Active</span>
                   <span className="text-lg font-bold font-serif-display text-[#171717]">
                     {profiles.length} Companions
@@ -248,7 +248,7 @@ export function LocationDetailPageView({
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
               {services.map((srv) => (
                 <div
                   key={srv.id}
@@ -298,7 +298,7 @@ export function LocationDetailPageView({
               </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
               {nearbyLocations.map((nl) => (
                 <LocationCard
                   key={nl.id}
