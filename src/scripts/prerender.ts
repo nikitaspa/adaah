@@ -16,7 +16,7 @@ interface RouteData {
   path: string;
   title: string;
   description: string;
-  canonical: string;
+  canonical?: string;
   isNoindex?: boolean;
   ogType?: 'website' | 'article' | 'profile';
   ogImage?: string;
@@ -133,11 +133,20 @@ export function buildRouteHtml(route: RouteData, templateHtml: string): string {
     `<meta name="description" content="${escapeHtml(route.description)}" />`
   );
 
-  // 3. Replace Canonical
-  html = html.replace(
-    /<link rel="canonical" href=".*?" \/>/s,
-    `<link rel="canonical" href="${route.canonical}" />`
-  );
+  // 3. Replace or remove Canonical
+  if (route.canonical) {
+    if (html.includes('<link rel="canonical"')) {
+      html = html.replace(
+        /<link rel="canonical" href=".*?" \/>/s,
+        `<link rel="canonical" href="${route.canonical}" />`
+      );
+    } else {
+      html = html.replace('</head>', `    <link rel="canonical" href="${route.canonical}" />\n  </head>`);
+    }
+  } else {
+    // 404 pages must NEVER have a canonical URL tag
+    html = html.replace(/\s*<link rel="canonical" href=".*?" \/>/s, '');
+  }
 
   // 4. Update / Insert Robots Directive
   const robotsContent = route.isNoindex ? 'noindex, follow' : 'index, follow';
@@ -153,7 +162,11 @@ export function buildRouteHtml(route: RouteData, templateHtml: string): string {
 
   html = html.replace(/<meta property="og:title" content=".*?" \/>/s, `<meta property="og:title" content="${escapeHtml(route.title)}" />`);
   html = html.replace(/<meta property="og:description" content=".*?" \/>/s, `<meta property="og:description" content="${escapeHtml(route.description)}" />`);
-  html = html.replace(/<meta property="og:url" content=".*?" \/>/s, `<meta property="og:url" content="${route.canonical}" />`);
+  if (route.canonical) {
+    html = html.replace(/<meta property="og:url" content=".*?" \/>/s, `<meta property="og:url" content="${route.canonical}" />`);
+  } else {
+    html = html.replace(/\s*<meta property="og:url" content=".*?" \/>/s, '');
+  }
   html = html.replace(/<meta property="og:type" content=".*?" \/>/s, `<meta property="og:type" content="${ogType}" />`);
 
   const extraMeta = `
@@ -794,7 +807,6 @@ export async function prerenderAllRoutes() {
     path: '/404.html',
     title: 'Page Not Found (404) | Adaah',
     description: 'The requested page could not be located on Adaah directory.',
-    canonical: `${BASE_URL}/404`,
     isNoindex: true,
     h1: 'Page Not Found',
     contentHtml: `

@@ -239,14 +239,21 @@ export function SeoManager({ currentPath }: SeoManagerProps) {
       updateMetaTag('google-site-verification', '', SEO_CONFIG.googleSiteVerification);
     }
 
-    // Canonical Tag
+    // Canonical Tag (404 pages must NEVER have a canonical URL tag)
     let canonicalTag = document.querySelector('link[rel="canonical"]');
-    if (!canonicalTag) {
-      canonicalTag = document.createElement('link');
-      canonicalTag.setAttribute('rel', 'canonical');
-      document.head.appendChild(canonicalTag);
+    const is404 = isNoindex && (title.includes('404') || pathOnly === '/404' || pathOnly === '/404.html');
+    if (is404) {
+      if (canonicalTag) {
+        canonicalTag.remove();
+      }
+    } else {
+      if (!canonicalTag) {
+        canonicalTag = document.createElement('link');
+        canonicalTag.setAttribute('rel', 'canonical');
+        document.head.appendChild(canonicalTag);
+      }
+      canonicalTag.setAttribute('href', canonicalUrl);
     }
-    canonicalTag.setAttribute('href', canonicalUrl);
 
     // Update JSON-LD Script
     let ldScript = document.getElementById('adaah-schema-ld') as HTMLScriptElement | null;

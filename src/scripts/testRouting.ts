@@ -80,12 +80,12 @@ const server = app.listen(port, async () => {
     { path: '/blog', expected: 308, expectedLocation: '/guides' },
 
     // 404 Not Found tests
-    { path: '/profiles/aaradhya', expected: 404 },
-    { path: '/profiles/diya', expected: 404 },
-    { path: '/profiles/ria', expected: 404 },
-    { path: '/services/overnight-companionship', expected: 404 },
-    { path: '/guides/identifying-verified-profiles', expected: 404 },
-    { path: '/random-unknown-page-xyz', expected: 404 },
+    { path: '/profiles/aaradhya', expected: 404, checkNoCanonical: true },
+    { path: '/profiles/diya', expected: 404, checkNoCanonical: true },
+    { path: '/profiles/ria', expected: 404, checkNoCanonical: true },
+    { path: '/services/overnight-companionship', expected: 404, checkNoCanonical: true },
+    { path: '/guides/identifying-verified-profiles', expected: 404, checkNoCanonical: true },
+    { path: '/random-unknown-page-xyz', expected: 404, checkNoCanonical: true },
   ];
 
   let passed = 0;
@@ -101,16 +101,22 @@ const server = app.listen(port, async () => {
       let locationOk = !t.expectedLocation || location === t.expectedLocation;
 
       let noindexOk = true;
-      if (t.checkNoindex) {
+      let noCanonicalOk = true;
+      if (t.checkNoindex || (t as any).checkNoCanonical) {
         const body = await res.text();
-        noindexOk = body.includes('name="robots" content="noindex, follow"');
+        if (t.checkNoindex) {
+          noindexOk = body.includes('name="robots" content="noindex, follow"');
+        }
+        if ((t as any).checkNoCanonical) {
+          noCanonicalOk = !body.includes('rel="canonical"') && !body.includes('og:url');
+        }
       }
 
-      if (statusOk && locationOk && noindexOk) {
+      if (statusOk && locationOk && noindexOk && noCanonicalOk) {
         console.log(`✓ [PASS] ${t.path} -> ${status}${location ? ` (-> ${location})` : ''}`);
         passed++;
       } else {
-        console.error(`✗ [FAIL] ${t.path} -> got ${status} (expected ${t.expected}), location: ${location}, noindexOk: ${noindexOk}`);
+        console.error(`✗ [FAIL] ${t.path} -> got ${status} (expected ${t.expected}), location: ${location}, noindexOk: ${noindexOk}, noCanonicalOk: ${noCanonicalOk}`);
         failed++;
       }
     } catch (err) {
