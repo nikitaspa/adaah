@@ -13,12 +13,121 @@
       ],
       "destination": "https://adaah.life/:path*",
       "permanent": true
-    }
-  ],
-  "rewrites": [
+    },
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "source": "/blog",
+      "destination": "/guides",
+      "permanent": true
+    },
+    {
+      "source": "/blog/:slug*",
+      "destination": "/guides/:slug*",
+      "permanent": true
+    },
+    {
+      "source": "/profiles/ananya",
+      "destination": "/profiles/ananya-banjara-hills",
+      "permanent": true
+    },
+    {
+      "source": "/profiles/priya",
+      "destination": "/profiles/priya-banjara-hills",
+      "permanent": true
+    },
+    {
+      "source": "/profiles/neha",
+      "destination": "/profiles/neha-banjara-hills",
+      "permanent": true
+    },
+    {
+      "source": "/profiles/kavya",
+      "destination": "/profiles/kavya-banjara-hills",
+      "permanent": true
+    },
+    {
+      "source": "/profiles/isha",
+      "destination": "/profiles/isha-jubilee-hills",
+      "permanent": true
+    },
+    {
+      "source": "/profiles/meera",
+      "destination": "/profiles/meera-jubilee-hills",
+      "permanent": true
+    },
+    {
+      "source": "/profiles/sneha",
+      "destination": "/profiles/sneha-gachibowli",
+      "permanent": true
+    },
+    {
+      "source": "/profiles/tanvi",
+      "destination": "/profiles/tanvi-gachibowli",
+      "permanent": true
+    },
+    {
+      "source": "/profiles/shreya",
+      "destination": "/profiles/shreya-gachibowli",
+      "permanent": true
+    },
+    {
+      "source": "/profiles/simran",
+      "destination": "/profiles/simran-hitech-city",
+      "permanent": true
+    },
+    {
+      "source": "/profiles/trisha",
+      "destination": "/profiles/trisha-madhapur",
+      "permanent": true
+    },
+    {
+      "source": "/profiles/tara",
+      "destination": "/profiles/tara-madhapur",
+      "permanent": true
+    },
+    {
+      "source": "/profiles/roshni",
+      "destination": "/profiles/roshni-kondapur",
+      "permanent": true
+    },
+    {
+      "source": "/services/dinner-date-accompaniment",
+      "destination": "/services/dinner-companion",
+      "permanent": true
+    },
+    {
+      "source": "/services/luxury-travel-partner",
+      "destination": "/services/travel-companion",
+      "permanent": true
+    },
+    {
+      "source": "/services/vip-social-companionship",
+      "destination": "/services/social-companion",
+      "permanent": true
+    },
+    {
+      "source": "/services/incall-appointment",
+      "destination": "/services/companionship",
+      "permanent": true
+    },
+    {
+      "source": "/services/hotel-suite-outcall",
+      "destination": "/services/companionship",
+      "permanent": true
+    },
+    {
+      "source": "/guides/hotel-suite-outcall-safety-guide",
+      "destination": "/guides/hotel-suite-appointments-hyderabad",
+      "permanent": true
+    },
+    {
+      "source": "/guides/hyderabad-companion-booking-etiquette",
+      "destination": "/guides/first-time-client-etiquette",
+      "permanent": true
+    },
+    {
+      "source": "/guides/discretion-privacy-protocols",
+      "destination": "/safety",
+      "permanent": true
     }
   ]
 }

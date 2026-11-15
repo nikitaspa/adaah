@@ -21,6 +21,7 @@ export function LocationDetailPageView({
 }: LocationDetailPageViewProps) {
   const [location, setLocation] = useState<Location | null>(null);
   const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [nearbyProfiles, setNearbyProfiles] = useState<Profile[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [nearbyLocations, setNearbyLocations] = useState<Location[]>([]);
@@ -42,11 +43,13 @@ export function LocationDetailPageView({
           LocationRepository.getNearbyLocations(loc.id, 3),
           CategoryRepository.getFeaturedCategories(),
           ServiceRepository.getPopularServices(),
-        ]).then(([profs, nearby, cats, srvs]) => {
+          ProfileRepository.getFeaturedProfiles(4),
+        ]).then(([profs, nearby, cats, srvs, featuredNearby]) => {
           setProfiles(profs);
           setNearbyLocations(nearby);
           setCategories(cats.slice(0, 4));
           setServices(srvs.slice(0, 3));
+          setNearbyProfiles(featuredNearby);
           setIsLoading(false);
         });
       } else {
@@ -181,12 +184,44 @@ export function LocationDetailPageView({
             </div>
           </div>
 
-          <ProfileGrid
-            profiles={profiles}
-            isLoading={false}
-            onViewProfile={(profileSlug) => onNavigate(`/profiles/${profileSlug}`)}
-            onRequestService={onRequestService}
-          />
+          {profiles.length > 0 ? (
+            <ProfileGrid
+              profiles={profiles}
+              isLoading={false}
+              onViewProfile={(profileSlug) => onNavigate(`/profiles/${profileSlug}`)}
+              onRequestService={onRequestService}
+            />
+          ) : (
+            <div className="space-y-6">
+              <div className="p-4 sm:p-5 rounded-2xl bg-[#F0EBE1] border border-[#E6E1D8] text-xs text-[#5F5A52] leading-relaxed">
+                <div className="flex items-center gap-2 text-[#171717] font-bold text-sm mb-1.5">
+                  <Sparkles className="w-4 h-4 text-[#C6922E]" />
+                  <span>Outcall Reservations to {location.name}</span>
+                </div>
+                <p>
+                  Direct resident profiles in {location.name} are currently limited. Verified independent companions based in adjacent central and western Hyderabad corridors offer discreet outcall accompaniment to luxury hotel suites and private residences in {location.name}.
+                </p>
+              </div>
+
+              <div>
+                <div className="mb-4">
+                  <h3 className="font-serif-display text-xl font-bold text-[#171717]">
+                    Profiles available in nearby areas
+                  </h3>
+                  <p className="text-xs text-[#5F5A52] mt-0.5">
+                    The following companions accept reservations with travel to {location.name}:
+                  </p>
+                </div>
+
+                <ProfileGrid
+                  profiles={nearbyProfiles}
+                  isLoading={false}
+                  onViewProfile={(profileSlug) => onNavigate(`/profiles/${profileSlug}`)}
+                  onRequestService={onRequestService}
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         {/* 4. Popular Categories in this Location */}

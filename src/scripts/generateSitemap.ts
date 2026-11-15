@@ -5,7 +5,7 @@ import { mockLocations } from '../data/locations';
 import { mockCategories } from '../data/categories';
 import { mockServices } from '../data/services';
 import { mockGuides } from '../data/guides';
-import { SEO_CONFIG } from '../config/seo';
+import { isLocationIndexable } from '../lib/seo';
 
 export function generateSitemapXml(): string {
   const baseUrl = 'https://adaah.life';
@@ -29,7 +29,7 @@ export function generateSitemapXml(): string {
   let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
   xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
-  // Static routes
+  // 1. Static core routes (12 URLs)
   for (const route of staticRoutes) {
     xml += `  <url>\n`;
     xml += `    <loc>${baseUrl}${route.path}</loc>\n`;
@@ -39,7 +39,7 @@ export function generateSitemapXml(): string {
     xml += `  </url>\n`;
   }
 
-  // Profile detail pages
+  // 2. Active Profile detail pages (34 active profiles)
   for (const profile of mockProfiles) {
     xml += `  <url>\n`;
     xml += `    <loc>${baseUrl}/profiles/${profile.slug}</loc>\n`;
@@ -49,8 +49,9 @@ export function generateSitemapXml(): string {
     xml += `  </url>\n`;
   }
 
-  // Location detail pages (all 30 Hyderabad locations)
-  for (const loc of mockLocations) {
+  // 3. Location detail pages (Only genuinely populated locations with verified resident profiles)
+  const indexableLocations = mockLocations.filter((loc) => isLocationIndexable(loc.slug, mockProfiles));
+  for (const loc of indexableLocations) {
     xml += `  <url>\n`;
     xml += `    <loc>${baseUrl}/locations/${loc.slug}</loc>\n`;
     xml += `    <lastmod>${today}</lastmod>\n`;
@@ -59,7 +60,7 @@ export function generateSitemapXml(): string {
     xml += `  </url>\n`;
   }
 
-  // Category detail pages
+  // 4. Category detail pages (7 active categories)
   for (const cat of mockCategories) {
     xml += `  <url>\n`;
     xml += `    <loc>${baseUrl}/categories/${cat.slug}</loc>\n`;
@@ -69,7 +70,7 @@ export function generateSitemapXml(): string {
     xml += `  </url>\n`;
   }
 
-  // Service detail pages
+  // 5. Service detail pages (5 active services)
   for (const srv of mockServices) {
     xml += `  <url>\n`;
     xml += `    <loc>${baseUrl}/services/${srv.slug}</loc>\n`;
@@ -79,7 +80,7 @@ export function generateSitemapXml(): string {
     xml += `  </url>\n`;
   }
 
-  // Guide detail pages
+  // 6. Guide detail pages (3 active guides)
   for (const guide of mockGuides) {
     xml += `  <url>\n`;
     xml += `    <loc>${baseUrl}/guides/${guide.slug}</loc>\n`;
@@ -94,8 +95,14 @@ export function generateSitemapXml(): string {
   return xml;
 }
 
-// Write to public/sitemap.xml if executed directly or imported
+// Generate sitemap.xml in both public/ and dist/ (if dist exists)
 const xmlContent = generateSitemapXml();
-const outputPath = path.resolve(process.cwd(), 'public/sitemap.xml');
-fs.writeFileSync(outputPath, xmlContent, 'utf8');
-console.log(`Successfully generated sitemap.xml at ${outputPath}`);
+const publicOutputPath = path.resolve(process.cwd(), 'public/sitemap.xml');
+fs.writeFileSync(publicOutputPath, xmlContent, 'utf8');
+console.log(`[Sitemap] Successfully generated sitemap.xml at ${publicOutputPath}`);
+
+const distOutputPath = path.resolve(process.cwd(), 'dist/sitemap.xml');
+if (fs.existsSync(path.resolve(process.cwd(), 'dist'))) {
+  fs.writeFileSync(distOutputPath, xmlContent, 'utf8');
+  console.log(`[Sitemap] Copied sitemap.xml to ${distOutputPath}`);
+}

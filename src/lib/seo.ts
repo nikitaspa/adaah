@@ -180,3 +180,19 @@ export function shouldNoindexQuery(queryString: string): boolean {
   }
   return false;
 }
+
+/**
+ * Determines whether a location is indexable based on genuine directory listings.
+ * A location page is indexable if and only if it has genuine resident profiles.
+ */
+export function isLocationIndexable(
+  locationSlug: string,
+  profiles: { locationId?: string; area?: string }[]
+): boolean {
+  const normalizedSlug = locationSlug.toLowerCase().trim();
+  return profiles.some((p) => {
+    const pLocId = (p.locationId || '').toLowerCase().replace(/^loc-/, '');
+    const pArea = (p.area || '').toLowerCase().replace(/\s+/g, '-');
+    return pLocId === normalizedSlug || pArea === normalizedSlug;
+  });
+}

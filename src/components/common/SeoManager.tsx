@@ -1,7 +1,12 @@
 import React, { useEffect } from 'react';
 import { SEO_CONFIG } from '../../config/seo';
 import { KEYWORD_STRATEGY } from '../../config/keywords';
-import { createCanonicalUrl, shouldNoindexQuery } from '../../lib/seo';
+import { createCanonicalUrl, shouldNoindexQuery, isLocationIndexable } from '../../lib/seo';
+import { mockProfiles } from '../../data/profiles';
+import { mockLocations } from '../../data/locations';
+import { mockCategories } from '../../data/categories';
+import { mockServices } from '../../data/services';
+import { mockGuides } from '../../data/guides';
 
 export interface SeoManagerProps {
   currentPath: string;
@@ -56,64 +61,79 @@ export function SeoManager({ currentPath }: SeoManagerProps) {
       description = KEYWORD_STRATEGY.profilesListing.suggestedDescription;
     } else if (pathOnly.startsWith('/profiles/')) {
       const slug = pathOnly.replace('/profiles/', '').split('/')[0];
-      const profileName = slug
-        .split('-')
-        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-        .join(' ');
+      const profile = mockProfiles.find((p) => p.slug === slug);
 
-      title = `${profileName} | Hyderabad 18+ Profile | Adaah`;
-      description = `View verified portfolio, location, availability and confidential inquiry options for ${profileName} in Hyderabad on Adaah directory.`;
-      ogType = 'profile';
+      if (!profile) {
+        title = 'Profile Not Found (404) | Adaah';
+        description = 'The requested companion profile is currently unavailable on Adaah directory.';
+        isNoindex = true;
+      } else {
+        title = `${profile.name} — ${profile.area} 18+ Profile | Adaah`;
+        description = `View verified portfolio, location, availability and confidential inquiry options for ${profile.name} (${profile.age}) in ${profile.area}, Hyderabad on Adaah directory.`;
+        ogType = 'profile';
 
-      schemaList.push({
-        '@context': 'https://schema.org',
-        '@type': 'Person',
-        name: profileName,
-        jobTitle: 'Independent Companion',
-        url: canonicalUrl,
-        homeLocation: {
-          '@type': 'Place',
-          name: 'Hyderabad, Telangana, India',
-        },
-      });
+        schemaList.push({
+          '@context': 'https://schema.org',
+          '@type': 'Person',
+          name: profile.name,
+          jobTitle: 'Independent Companion',
+          url: canonicalUrl,
+          homeLocation: {
+            '@type': 'Place',
+            name: `${profile.area}, Hyderabad, Telangana, India`,
+          },
+        });
+      }
     } else if (pathOnly === '/locations') {
       title = KEYWORD_STRATEGY.locationsListing.suggestedTitle;
       description = KEYWORD_STRATEGY.locationsListing.suggestedDescription;
     } else if (pathOnly.startsWith('/locations/')) {
       const slug = pathOnly.replace('/locations/', '').split('/')[0];
-      const locCluster = (KEYWORD_STRATEGY.locationClusters as any)[slug];
-      
-      const locName = slug
-        .split('-')
-        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-        .join(' ');
+      const loc = mockLocations.find((l) => l.slug === slug);
 
-      title = locCluster?.title || `${locName} Call Girls & 18+ Directory | Adaah`;
-      description = `Explore verified 18+ private companion listings and local directory information in ${locName}, Hyderabad. Incall luxury suites and outcall appointments.`;
+      if (!loc) {
+        title = 'Location Not Found (404) | Adaah';
+        description = 'The requested Hyderabad location directory could not be located.';
+        isNoindex = true;
+      } else {
+        if (!isLocationIndexable(slug, mockProfiles)) {
+          isNoindex = true;
+        }
+
+        const locCluster = (KEYWORD_STRATEGY.locationClusters as any)[slug];
+        title = locCluster?.title || `${loc.name} Companions & 18+ Directory | Adaah`;
+        description = `Explore verified 18+ private companion listings and local directory information in ${loc.name}, Hyderabad. Incall luxury suites and outcall appointments.`;
+      }
     } else if (pathOnly === '/categories') {
       title = 'Companion Categories & Specialties in Hyderabad | Adaah';
       description = 'Explore companion classifications including Independent Companions, VIP Companions, Models, Travel Partners, and Dinner Escorts in Hyderabad.';
     } else if (pathOnly.startsWith('/categories/')) {
       const slug = pathOnly.replace('/categories/', '').split('/')[0];
-      const catName = slug
-        .split('-')
-        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-        .join(' ');
+      const cat = mockCategories.find((c) => c.slug === slug);
 
-      title = `${catName} in Hyderabad | Adaah`;
-      description = `Verified independent companion profiles categorized under ${catName} in Hyderabad with transparent rate guidelines.`;
+      if (!cat) {
+        title = 'Category Not Found (404) | Adaah';
+        description = 'The requested companion category could not be located.';
+        isNoindex = true;
+      } else {
+        title = `${cat.name} in Hyderabad | Adaah`;
+        description = `Verified independent companion profiles categorized under ${cat.name} in Hyderabad with transparent rate guidelines.`;
+      }
     } else if (pathOnly === '/services') {
       title = 'Companionship Services & Occasions in Hyderabad | Adaah';
       description = 'Discover companion occasions including fine dining accompaniment, VIP travel, hotel suite outcalls, and social event companionship in Hyderabad.';
     } else if (pathOnly.startsWith('/services/')) {
       const slug = pathOnly.replace('/services/', '').split('/')[0];
-      const srvName = slug
-        .split('-')
-        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-        .join(' ');
+      const srv = mockServices.find((s) => s.slug === slug);
 
-      title = `${srvName} in Hyderabad | Adaah`;
-      description = `Details, etiquette benchmarks, and verified companion availability for ${srvName} in Hyderabad.`;
+      if (!srv) {
+        title = 'Service Not Found (404) | Adaah';
+        description = 'The requested companionship service could not be located.';
+        isNoindex = true;
+      } else {
+        title = `${srv.name} in Hyderabad | Adaah`;
+        description = `Details, etiquette benchmarks, and verified companion availability for ${srv.name} in Hyderabad.`;
+      }
     } else if (pathOnly === '/guides' || pathOnly === '/blog') {
       title = 'Editorial Guides, Discretion & Safety | Adaah';
       description = 'Read authoritative field guides, booking etiquette, privacy guidelines, and safety protocols for consensual adult arrangements in Hyderabad.';
@@ -122,28 +142,36 @@ export function SeoManager({ currentPath }: SeoManagerProps) {
         ? pathOnly.replace('/guides/', '')
         : pathOnly.replace('/blog/', '')
       ).split('/')[0];
-      const guideTitle = slug
-        .split('-')
-        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-        .join(' ');
+      const guide = mockGuides.find((g) => g.slug === slug);
 
-      title = `${guideTitle} | Adaah`;
-      description = `Read comprehensive safety guidance and discretion protocols on ${guideTitle} for adult companion arrangements in Hyderabad.`;
-      ogType = 'article';
+      if (!guide) {
+        title = 'Article Not Found (404) | Adaah';
+        description = 'The requested editorial guide could not be located.';
+        isNoindex = true;
+      } else {
+        title = `${guide.title} | Adaah`;
+        description = guide.excerpt;
+        ogType = 'article';
 
-      schemaList.push({
-        '@context': 'https://schema.org',
-        '@type': 'Article',
-        headline: guideTitle,
-        publisher: {
-          '@type': 'Organization',
-          name: SEO_CONFIG.siteName,
-          logo: {
-            '@type': 'ImageObject',
-            url: SEO_CONFIG.organization.logo,
+        schemaList.push({
+          '@context': 'https://schema.org',
+          '@type': 'Article',
+          headline: guide.title,
+          description: guide.excerpt,
+          author: {
+            '@type': 'Person',
+            name: guide.author?.name || 'Editorial Team',
           },
-        },
-      });
+          publisher: {
+            '@type': 'Organization',
+            name: SEO_CONFIG.siteName,
+            logo: {
+              '@type': 'ImageObject',
+              url: SEO_CONFIG.organization.logo,
+            },
+          },
+        });
+      }
     } else if (pathOnly === '/faq') {
       title = 'Frequently Asked Questions & Support | Adaah';
       description = 'Clear answers regarding 18+ verification, photo authenticity, booking procedures, discretion protocols, and patron privacy in Hyderabad.';

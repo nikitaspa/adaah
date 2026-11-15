@@ -3,5 +3,36 @@ https://www.adaah.life/*   https://adaah.life/:splat   301!
 http://www.adaah.life/*    https://adaah.life/:splat   301!
 http://adaah.life/*        https://adaah.life/:splat   301!
 
-# SPA Routing Fallback
-/*    /index.html   200
+# Guides / Blog Aliases
+/blog           /guides         301!
+/blog/*         /guides/:splat  301!
+
+# Phase 1 Legacy Profile 301 Redirects
+/profiles/ananya    /profiles/ananya-banjara-hills    301!
+/profiles/priya     /profiles/priya-banjara-hills     301!
+/profiles/neha      /profiles/neha-banjara-hills      301!
+/profiles/kavya     /profiles/kavya-banjara-hills     301!
+/profiles/isha      /profiles/isha-jubilee-hills      301!
+/profiles/meera     /profiles/meera-jubilee-hills     301!
+/profiles/sneha     /profiles/sneha-gachibowli        301!
+/profiles/tanvi     /profiles/tanvi-gachibowli        301!
+/profiles/shreya    /profiles/shreya-gachibowli       301!
+/profiles/simran    /profiles/simran-hitech-city      301!
+/profiles/trisha    /profiles/trisha-madhapur         301!
+/profiles/tara      /profiles/tara-madhapur           301!
+/profiles/roshni    /profiles/roshni-kondapur         301!
+
+# Phase 1 Legacy Service 301 Redirects
+/services/dinner-date-accompaniment   /services/dinner-companion  301!
+/services/luxury-travel-partner       /services/travel-companion  301!
+/services/vip-social-companionship    /services/social-companion  301!
+/services/incall-appointment          /services/companionship     301!
+/services/hotel-suite-outcall         /services/companionship     301!
+
+# Phase 1 Legacy Guide 301 Redirects
+/guides/hotel-suite-outcall-safety-guide         /guides/hotel-suite-appointments-hyderabad  301!
+/guides/hyderabad-companion-booking-etiquette   /guides/first-time-client-etiquette         301!
+/guides/discretion-privacy-protocols            /safety                                     301!
+
+# 404 Fallback
+/*   /404.html   404

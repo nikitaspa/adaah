@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
-    "build": "tsx src/scripts/generateSitemap.ts && vite build",
+    "build": "tsx src/scripts/generateSitemap.ts && vite build && tsx src/scripts/prerender.ts",
     "preview": "vite preview",
     "clean": "rm -rf dist server.js",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "test:routes": "tsx src/scripts/testRouting.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
